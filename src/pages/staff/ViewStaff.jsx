@@ -65,7 +65,7 @@ const ViewStaff = ({ userEmail, onLogout }) => {
     setError('')
     try {
       const response = await axios.get(
-        'https://api.pranvidyatech.in/auth/all/staff?role=ZP_STAFF',
+        'https://api.gramsamruddhi.in/auth/all/staff?role=ZP_STAFF',
         { withCredentials: true }
       )
       setStaff(response.data.staff || [])
@@ -80,7 +80,7 @@ const ViewStaff = ({ userEmail, onLogout }) => {
   const fetchRegions = async () => {
     try {
       const response = await axios.get(
-        'https://api.pranvidyatech.in/auth/all/region?type=applicant',
+        'https://api.gramsamruddhi.in/auth/all/region?type=applicant',
         { withCredentials: true }
       )
       setRegions(response.data.region || [])
@@ -103,7 +103,7 @@ const ViewStaff = ({ userEmail, onLogout }) => {
 
     try {
       const response = await axios.delete(
-        'https://api.pranvidyatech.in/auth/staff',
+        'https://api.gramsamruddhi.in/auth/staff',
         {
           data: {
             email: deleteTarget.email,

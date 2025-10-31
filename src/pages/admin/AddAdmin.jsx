@@ -55,7 +55,7 @@ const AddAdmin = ({ userEmail, onLogout }) => {
 
     try {
       const response = await axios.post(
-        'https://api.pranvidyatech.in/auth/staff',
+        'https://api.gramsamruddhi.in/auth/staff',
         {
           email: email,
           role: 'ZP_ADMIN',

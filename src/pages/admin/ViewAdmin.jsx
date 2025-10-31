@@ -55,7 +55,7 @@ const ViewAdmin = ({ userEmail, onLogout }) => {
     setError('')
     try {
       const response = await axios.get(
-        'https://api.pranvidyatech.in/auth/all/staff?role=ZP_ADMIN',
+        'https://api.gramsamruddhi.in/auth/all/staff?role=ZP_ADMIN',
         { withCredentials: true }
       )
       setAdmins(response.data.staff || [])
@@ -81,7 +81,7 @@ const ViewAdmin = ({ userEmail, onLogout }) => {
 
     try {
       const response = await axios.delete(
-        'https://api.pranvidyatech.in/auth/staff',
+        'https://api.gramsamruddhi.in/auth/staff',
         {
           data: {
             email: deleteTarget.email,
