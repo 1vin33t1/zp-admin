@@ -3,127 +3,155 @@ import { useState, useEffect } from 'react'
 import axios from 'axios'
 import './App.css'
 import LoginPage from './pages/LoginPage'
-import DashboardHome from './pages/DashboardHome.jsx'
-import ViewStaff from './pages/staff/ViewStaff.jsx'
-import AddStaff from './pages/staff/AddStaff.jsx'
-import EditStaff from './pages/staff/EditStaff.jsx'
-import ViewAdmin from './pages/admin/ViewAdmin.jsx'
-import AddAdmin from './pages/admin/AddAdmin.jsx'
-import AddRegion from './pages/region/AddRegion.jsx'
+import DashboardHome from './pages/DashboardHome'
+import ViewStaff from './pages/staff/ViewStaff'
+import AddStaff from './pages/staff/AddStaff'
+import EditStaff from './pages/staff/EditStaff'
+import ViewAdmin from './pages/admin/ViewAdmin'
+import AddAdmin from './pages/admin/AddAdmin'
+import AddRegion from './pages/region/AddRegion'
 import ProtectedRoute from './components/ProtectedRoute'
 
 function App() {
-    const [isAuthenticated, setIsAuthenticated] = useState(null)
-    const [userEmail, setUserEmail] = useState(null)
-    const [loading, setLoading] = useState(true)
+  const [isAuthenticated, setIsAuthenticated] = useState(null)
+  const [userEmail, setUserEmail] = useState(null)
+  const [loading, setLoading] = useState(true)
 
-    useEffect(() => {
-        checkAuthStatus()
-    }, [])
+  useEffect(() => {
+    checkAuthStatus()
+  }, [])
 
-    const checkAuthStatus = async () => {
-        try {
-            const response = await axios.get('https://api.pranvidyatech.in/auth/status/admin', {
-                withCredentials: true,
-            })
-            if (response.data.status === true) {
-                setIsAuthenticated(true)
-                setUserEmail(response.data.email || null)
-            } else {
-                setIsAuthenticated(false)
-            }
-        } catch (error) {
-            setIsAuthenticated(false)
-        } finally {
-            setLoading(false)
+  const checkAuthStatus = async () => {
+    try {
+      const response = await axios.get('https://api.pranvidyatech.in/auth/status/admin', {
+        withCredentials: true,
+      })
+      if (response.data.status === true) {
+        setIsAuthenticated(true)
+        setUserEmail(response.data.email || null)
+      } else {
+        setIsAuthenticated(false)
+      }
+    } catch (error) {
+      setIsAuthenticated(false)
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  const handleLogout = async () => {
+    try {
+      await axios.post('https://api.pranvidyatech.in/auth/logout/zp-admin', {}, {
+        withCredentials: true,
+      })
+    } catch (error) {
+      console.log('Logout error:', error)
+    } finally {
+      setIsAuthenticated(false)
+      setUserEmail(null)
+    }
+  }
+
+  if (loading) {
+    return <div className="loading">Loading...</div>
+  }
+
+  return (
+    <Routes>
+      {/* Login Route */}
+      <Route 
+        path="/" 
+        element={
+          isAuthenticated ? (
+            <Navigate to="/dashboard" replace />
+          ) : (
+            <LoginPage onLoginSuccess={() => checkAuthStatus()} />
+          )
+        } 
+      />
+
+      {/* Dashboard Route */}
+      <Route
+        path="/dashboard"
+        element={
+          isAuthenticated ? (
+            <DashboardHome userEmail={userEmail} onLogout={handleLogout} />
+          ) : (
+            <Navigate to="/" replace />
+          )
         }
-    }
+      />
 
-    const handleLogout = async () => {
-        try {
-            await axios.post('https://api.pranvidyatech.in/auth/logout/zp-admin', {}, {
-                withCredentials: true,
-            })
-        } catch (error) {
-            console.log('Logout error:', error)
-        } finally {
-            setIsAuthenticated(false)
-            setUserEmail(null)
+      {/* Staff Routes */}
+      <Route
+        path="/staff/view"
+        element={
+          isAuthenticated ? (
+            <ViewStaff userEmail={userEmail} onLogout={handleLogout} />
+          ) : (
+            <Navigate to="/" replace />
+          )
         }
-    }
+      />
+      <Route
+        path="/staff/add"
+        element={
+          isAuthenticated ? (
+            <AddStaff userEmail={userEmail} onLogout={handleLogout} />
+          ) : (
+            <Navigate to="/" replace />
+          )
+        }
+      />
+      <Route
+        path="/staff/edit"
+        element={
+          isAuthenticated ? (
+            <EditStaff userEmail={userEmail} onLogout={handleLogout} />
+          ) : (
+            <Navigate to="/" replace />
+          )
+        }
+      />
 
-    if (loading) {
-        return <div className="loading">Loading...</div>
-    }
+      {/* Admin Routes */}
+      <Route
+        path="/admin/view"
+        element={
+          isAuthenticated ? (
+            <ViewAdmin userEmail={userEmail} onLogout={handleLogout} />
+          ) : (
+            <Navigate to="/" replace />
+          )
+        }
+      />
+      <Route
+        path="/admin/add"
+        element={
+          isAuthenticated ? (
+            <AddAdmin userEmail={userEmail} onLogout={handleLogout} />
+          ) : (
+            <Navigate to="/" replace />
+          )
+        }
+      />
 
-    return (
-        <Routes>
-            <Route path="/zp-admin" element={
-                isAuthenticated ? (
-                    <Navigate to="/zp-admin/dashboard" replace />
-                ) : (
-                    <LoginPage onLoginSuccess={() => checkAuthStatus()} />
-                )
-            } />
-            <Route
-                path="/zp-admin/dashboard"
-                element={
-                    <ProtectedRoute isAuthenticated={isAuthenticated} userEmail={userEmail} onLogout={handleLogout}>
-                        <DashboardHome userEmail={userEmail} onLogout={handleLogout} />
-                    </ProtectedRoute>
-                }
-            />
-            <Route
-                path="/zp-admin/staff/view"
-                element={
-                    <ProtectedRoute isAuthenticated={isAuthenticated} userEmail={userEmail} onLogout={handleLogout}>
-                        <ViewStaff userEmail={userEmail} onLogout={handleLogout} />
-                    </ProtectedRoute>
-                }
-            />
-            <Route
-                path="/zp-admin/staff/add"
-                element={
-                    <ProtectedRoute isAuthenticated={isAuthenticated} userEmail={userEmail} onLogout={handleLogout}>
-                        <AddStaff userEmail={userEmail} onLogout={handleLogout} />
-                    </ProtectedRoute>
-                }
-            />
-            <Route
-                path="/zp-admin/staff/edit"
-                element={
-                    <ProtectedRoute isAuthenticated={isAuthenticated} userEmail={userEmail} onLogout={handleLogout}>
-                        <EditStaff userEmail={userEmail} onLogout={handleLogout} />
-                    </ProtectedRoute>
-                }
-            />
-            <Route
-                path="/zp-admin/admin/view"
-                element={
-                    <ProtectedRoute isAuthenticated={isAuthenticated} userEmail={userEmail} onLogout={handleLogout}>
-                        <ViewAdmin userEmail={userEmail} onLogout={handleLogout} />
-                    </ProtectedRoute>
-                }
-            />
-            <Route
-                path="/zp-admin/admin/add"
-                element={
-                    <ProtectedRoute isAuthenticated={isAuthenticated} userEmail={userEmail} onLogout={handleLogout}>
-                        <AddAdmin userEmail={userEmail} onLogout={handleLogout} />
-                    </ProtectedRoute>
-                }
-            />
-            <Route
-                path="/zp-admin/region/add"
-                element={
-                    <ProtectedRoute isAuthenticated={isAuthenticated} userEmail={userEmail} onLogout={handleLogout}>
-                        <AddRegion userEmail={userEmail} onLogout={handleLogout} />
-                    </ProtectedRoute>
-                }
-            />
-            <Route path="*" element={<Navigate to="/zp-admin" replace />} />
-        </Routes>
-    )
+      {/* Region Routes */}
+      <Route
+        path="/region/add"
+        element={
+          isAuthenticated ? (
+            <AddRegion userEmail={userEmail} onLogout={handleLogout} />
+          ) : (
+            <Navigate to="/" replace />
+          )
+        }
+      />
+
+      {/* Catch all - redirect to home */}
+      <Route path="*" element={<Navigate to="/" replace />} />
+    </Routes>
+  )
 }
 
 export default App

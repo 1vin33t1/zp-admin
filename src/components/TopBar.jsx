@@ -1,70 +1,83 @@
-import { useState, useEffect } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import './TopBar.css'
+import { useState, useEffect } from 'react'
 
 const TopBar = ({ userEmail, onLogout, isLoggedIn }) => {
-    const [remainingTime, setRemainingTime] = useState('15:00')
-    const navigate = useNavigate()
+  const [remainingTime, setRemainingTime] = useState('15:00')
+  const navigate = useNavigate()
 
-    useEffect(() => {
-        if (!isLoggedIn) return
+  useEffect(() => {
+    if (!isLoggedIn) return
 
-        const INACTIVITY_TIMEOUT = 15 * 60 // 15 minutes in seconds
-        let timeRemaining = INACTIVITY_TIMEOUT
+    const INACTIVITY_TIMEOUT = 15 * 60 // 15 minutes in seconds
+    let timeRemaining = INACTIVITY_TIMEOUT
 
-        const interval = setInterval(() => {
-            timeRemaining--
+    const interval = setInterval(() => {
+      timeRemaining--
 
-            if (timeRemaining <= 0) {
-                clearInterval(interval)
-                setRemainingTime('0:00')
-                return
-            }
+      if (timeRemaining <= 0) {
+        clearInterval(interval)
+        setRemainingTime('0:00')
+        return
+      }
 
-            const minutes = Math.floor(timeRemaining / 60)
-            const seconds = timeRemaining % 60
-            setRemainingTime(`${minutes}:${seconds.toString().padStart(2, '0')}`)
-        }, 1000)
+      const minutes = Math.floor(timeRemaining / 60)
+      const seconds = timeRemaining % 60
+      setRemainingTime(`${minutes}:${seconds.toString().padStart(2, '0')}`)
+    }, 1000)
 
-        return () => clearInterval(interval)
-    }, [isLoggedIn])
+    return () => clearInterval(interval)
+  }, [isLoggedIn])
 
-    const handleLogout = async () => {
-        await onLogout()
-    }
+  const handleLogout = async () => {
+    await onLogout()
+  }
 
-    const handleBrandClick = () => {
-        navigate('/zp-admin/dashboard')
-    }
+  const handleBrandClick = () => {
+    navigate('/dashboard')
+  }
 
-    return (
-        <div className="top-bar">
-            <div className="top-bar-left">
-                <div className="top-bar-brand" onClick={handleBrandClick} style={{ cursor: 'pointer' }}>
-                    ग्राम समृद्धि
-                </div>
-                {isLoggedIn && (
-                    <Link to="/zp-admin/dashboard" className="dashboard-nav-link">
-                        Dashboard
-                    </Link>
-                )}
-            </div>
-
-            {isLoggedIn && (
-                <div className="top-bar-right">
-                    <div className="activity-timer">
-                        Session timeout: {remainingTime}
-                    </div>
-                    <div className="user-info">
-                        <div className="user-email">{userEmail}</div>
-                        <button className="logout-btn" onClick={handleLogout}>
-                            Logout
-                        </button>
-                    </div>
-                </div>
-            )}
+  return (
+    <div className="top-bar">
+      <div className="top-bar-left">
+        <div
+          className="top-bar-brand"
+          onClick={handleBrandClick}
+          style={{ cursor: 'pointer' }}
+        >
+          ग्राम समृद्धि
         </div>
-    )
+        {isLoggedIn && (
+          <button
+            onClick={handleBrandClick}
+            className="dashboard-nav-link"
+            style={{
+              background: 'none',
+              border: 'none',
+              color: 'white',
+              cursor: 'pointer',
+            }}
+          >
+            Dashboard
+          </button>
+        )}
+      </div>
+
+      {isLoggedIn && (
+        <div className="top-bar-right">
+          <div className="activity-timer">
+            Session timeout: {remainingTime}
+          </div>
+          <div className="user-info">
+            <div className="user-email">{userEmail}</div>
+            <button className="logout-btn" onClick={handleLogout}>
+              Logout
+            </button>
+          </div>
+        </div>
+      )}
+    </div>
+  )
 }
 
 export default TopBar

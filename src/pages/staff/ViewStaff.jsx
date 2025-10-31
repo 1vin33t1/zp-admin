@@ -90,7 +90,7 @@ const ViewStaff = ({ userEmail, onLogout }) => {
   }
 
   const handleEditClick = (staffMember) => {
-    navigate('/zp-admin/staff/edit', { state: { staff: staffMember } })
+    navigate('/staff/edit', { state: { staff: staffMember } })
   }
 
   const handleDeleteClick = (staffMember) => {
@@ -148,6 +148,10 @@ const ViewStaff = ({ userEmail, onLogout }) => {
     <div className="page-container">
       <TopBar userEmail={userEmail} onLogout={onLogout} isLoggedIn={true} />
       <div className="page-content">
+        <button onClick={() => navigate('/dashboard')} className="back-button">
+          ← Back to Dashboard
+        </button>
+
         <div className="page-heading">View Staff</div>
 
         {error && <div className="error-message">{error}</div>}

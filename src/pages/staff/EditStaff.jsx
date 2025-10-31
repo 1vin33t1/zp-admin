@@ -93,7 +93,7 @@ const EditStaff = ({ userEmail, onLogout }) => {
       if (response.data.success) {
         setShowSuccessModal(true)
         setTimeout(() => {
-          navigate('/zp-admin/staff/view')
+          navigate('/staff/view')
         }, 2000)
       } else {
         setError(response.data.failureReason || 'Failed to update staff')
@@ -122,7 +122,7 @@ const EditStaff = ({ userEmail, onLogout }) => {
         <TopBar userEmail={userEmail} onLogout={onLogout} isLoggedIn={true} />
         <div className="page-content">
           <div className="error-message">{error}</div>
-          <button onClick={() => navigate('/zp-admin/staff/view')} className="btn-back-error">
+          <button onClick={() => navigate('/staff/view')} className="btn-back-error">
             Go Back to Staff List
           </button>
         </div>
@@ -134,7 +134,7 @@ const EditStaff = ({ userEmail, onLogout }) => {
     <div className="page-container">
       <TopBar userEmail={userEmail} onLogout={onLogout} isLoggedIn={true} />
       <div className="page-content">
-        <button onClick={() => navigate('/zp-admin/staff/view')} className="back-button">
+        <button onClick={() => navigate('/staff/view')} className="back-button">
           ← Back to Staff List
         </button>
 
@@ -190,7 +190,7 @@ const EditStaff = ({ userEmail, onLogout }) => {
 
           <div className="button-group">
             <button
-              onClick={() => navigate('/zp-admin/staff/view')}
+              onClick={() => navigate('/staff/view')}
               className="btn-cancel"
             >
               Back to List
