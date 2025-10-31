@@ -737,14 +737,12 @@ select.form-control {
     format('woff2');
 }
 
-/* END PERPLEXITY DESIGN SYSTEM */
-css
-   .dashboard-container {
-       min-height: 100vh;
-       display: flex;
-       flex-direction: column;
-       background-color: var(--color-background);
-   }
+.dashboard-container {
+   min-height: 100vh;
+   display: flex;
+   flex-direction: column;
+   background-color: var(--color-background);
+}
 
 .dashboard-content {
     flex: 1;
@@ -766,14 +764,13 @@ css
     line-height: var(--line-height-normal);
 }
 
-/* Mobile responsive breakpoint */
 @media (max-width: 480px) {
     .dashboard-content {
         padding: var(--space-16);
     }
 
     .dashboard-heading {
-        font-size: var(--font-size-3xl);
+        font-size: var(--font-size-2xl);
         margin-bottom: var(--space-12);
     }
 

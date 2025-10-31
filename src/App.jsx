@@ -8,6 +8,7 @@ import ProtectedRoute from './components/ProtectedRoute'
 
 function App() {
     const [isAuthenticated, setIsAuthenticated] = useState(null)
+    const [userEmail, setUserEmail] = useState(null)
     const [loading, setLoading] = useState(true)
 
     useEffect(() => {
@@ -19,11 +20,29 @@ function App() {
             const response = await axios.get('https://api.pranvidyatech.in/auth/status/admin', {
                 withCredentials: true,
             })
-            setIsAuthenticated(response.data.status === true)
+            if (response.data.status === true) {
+                setIsAuthenticated(true)
+                setUserEmail(response.data.email || null)
+            } else {
+                setIsAuthenticated(false)
+            }
         } catch (error) {
             setIsAuthenticated(false)
         } finally {
             setLoading(false)
+        }
+    }
+
+    const handleLogout = async () => {
+        try {
+            await axios.post('https://api.pranvidyatech.in/auth/logout/zp-admin', {}, {
+                withCredentials: true,
+            })
+        } catch (error) {
+            console.log('Logout error:', error)
+        } finally {
+            setIsAuthenticated(false)
+            setUserEmail(null)
         }
     }
 
@@ -33,13 +52,17 @@ function App() {
 
     return (
         <Routes>
-            <Route path="/zp-admin" element={<LoginPage onLoginSuccess={() => setIsAuthenticated(true)} />} />
+            <Route path="/zp-admin" element={
+                isAuthenticated ? (
+                    <Navigate to="/zp-admin/dashboard" replace />
+                ) : (
+                    <LoginPage onLoginSuccess={() => checkAuthStatus()} />
+                )
+            } />
             <Route
                 path="/zp-admin/dashboard"
                 element={
-                    <ProtectedRoute isAuthenticated={isAuthenticated}>
-                        <Dashboard />
-                    </ProtectedRoute>
+                    <ProtectedRoute isAuthenticated={isAuthenticated} userEmail={userEmail} onLogout={handleLogout} />
                 }
             />
             <Route path="*" element={<Navigate to="/zp-admin" replace />} />

@@ -756,11 +756,11 @@ select.form-control {
 .login-container {
     background-color: var(--color-surface);
     border-radius: var(--radius-lg);
-    box-shadow: var(--shadow-md);
+    box-shadow: var(--shadow-lg);
+    border: 1px solid var(--color-card-border);
     padding: var(--space-32);
     max-width: 400px;
     width: 100%;
-    border: 1px solid var(--color-card-border);
 }
 
 .login-heading {
@@ -769,8 +769,8 @@ select.form-control {
     font-weight: var(--font-weight-semibold);
     margin-bottom: var(--space-24);
     color: var(--color-text);
-    line-height: var(--line-height-tight);
     letter-spacing: var(--letter-spacing-tight);
+    line-height: var(--line-height-tight);
 }
 
 .form-group {
@@ -786,13 +786,15 @@ select.form-control {
 }
 
 .form-input {
+    display: block;
     width: 100%;
-    padding: var(--space-12);
-    border: 1px solid var(--color-border);
-    border-radius: var(--radius-base);
+    padding: var(--space-8) var(--space-12);
     font-size: var(--font-size-lg);
+    line-height: 1.5;
     color: var(--color-text);
     background-color: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-base);
     transition: border-color var(--duration-fast) var(--ease-standard),
     box-shadow var(--duration-fast) var(--ease-standard);
 }
@@ -808,42 +810,54 @@ select.form-control {
 }
 
 .error-message {
-    color: var(--color-error);
-    font-size: var(--font-size-sm);
-    margin-top: var(--space-4);
+    color: var(--color-surface);
+    background-color: var(--color-error);
+    padding: var(--space-12);
+    border-radius: var(--radius-base);
+    font-size: var(--font-size-base);
+    margin-top: var(--space-8);
+    margin-bottom: var(--space-8);
 }
 
 .btn {
-    width: 100%;
-    padding: var(--space-12);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: var(--space-12) var(--space-24);
     border: none;
     border-radius: var(--radius-base);
     font-size: var(--font-size-lg);
     font-weight: var(--font-weight-medium);
+    line-height: 1.5;
     cursor: pointer;
     transition: all var(--duration-normal) var(--ease-standard);
-    line-height: var(--line-height-normal);
+    text-decoration: none;
+    position: relative;
+}
+
+.btn:focus-visible {
+    outline: none;
+    box-shadow: var(--focus-ring);
 }
 
 .btn-primary {
-    background-color: var(--color-primary);
+    background: var(--color-primary);
     color: var(--color-btn-primary-text);
+    width: 100%;
     margin-top: var(--space-8);
 }
 
 .btn-primary:hover:not(:disabled) {
-    background-color: var(--color-primary-hover);
+    background: var(--color-primary-hover);
+}
+
+.btn-primary:active {
+    background: var(--color-primary-active);
 }
 
 .btn-primary:disabled {
-    background-color: var(--color-secondary);
-    cursor: not-allowed;
     opacity: 0.5;
-}
-
-.btn-primary:focus-visible {
-    outline: none;
-    box-shadow: var(--focus-ring);
+    cursor: not-allowed;
 }
 
 .otp-step {
@@ -853,7 +867,7 @@ select.form-control {
 }
 
 .email-display {
-    font-size: var(--font-size-sm);
+    font-size: var(--font-size-base);
     color: var(--color-text-secondary);
     text-align: center;
     margin-bottom: var(--space-8);
@@ -862,13 +876,15 @@ select.form-control {
 .email-display a {
     color: var(--color-primary);
     cursor: pointer;
-    text-decoration: underline;
-    margin-left: var(--space-4);
+    text-decoration: none;
+    margin-left: var(--space-8);
+    font-weight: var(--font-weight-medium);
     transition: color var(--duration-fast) var(--ease-standard);
 }
 
 .email-display a:hover {
     color: var(--color-primary-hover);
+    text-decoration: underline;
 }
 
 .otp-inputs {
@@ -884,10 +900,10 @@ select.form-control {
     text-align: center;
     font-size: var(--font-size-3xl);
     font-weight: var(--font-weight-medium);
-    border: 1px solid var(--color-border);
-    border-radius: var(--radius-base);
     color: var(--color-text);
     background-color: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-base);
     transition: border-color var(--duration-fast) var(--ease-standard),
     box-shadow var(--duration-fast) var(--ease-standard);
 }
@@ -909,7 +925,10 @@ select.form-control {
 
 .btn-resend {
     flex: 1;
-    background-color: var(--color-secondary);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--color-secondary);
     color: var(--color-text);
     padding: var(--space-12);
     border: none;
@@ -917,17 +936,20 @@ select.form-control {
     font-size: var(--font-size-lg);
     font-weight: var(--font-weight-medium);
     cursor: pointer;
-    transition: background-color var(--duration-normal) var(--ease-standard);
+    transition: all var(--duration-normal) var(--ease-standard);
 }
 
 .btn-resend:hover:not(:disabled) {
-    background-color: var(--color-secondary-hover);
+    background: var(--color-secondary-hover);
+}
+
+.btn-resend:active {
+    background: var(--color-secondary-active);
 }
 
 .btn-resend:disabled {
-    background-color: var(--color-secondary);
-    cursor: not-allowed;
     opacity: 0.5;
+    cursor: not-allowed;
 }
 
 .btn-resend:focus-visible {
@@ -935,8 +957,47 @@ select.form-control {
     box-shadow: var(--focus-ring);
 }
 
+.btn-resend.active:not(:disabled) {
+    background: var(--color-primary);
+    color: var(--color-btn-primary-text);
+}
+
+.btn-verify {
+    flex: 1;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--color-primary);
+    color: var(--color-btn-primary-text);
+    padding: var(--space-12);
+    border: none;
+    border-radius: var(--radius-base);
+    font-size: var(--font-size-lg);
+    font-weight: var(--font-weight-medium);
+    cursor: pointer;
+    transition: all var(--duration-normal) var(--ease-standard);
+}
+
+.btn-verify:hover:not(:disabled) {
+    background: var(--color-primary-hover);
+}
+
+.btn-verify:active {
+    background: var(--color-primary-active);
+}
+
+.btn-verify:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.btn-verify:focus-visible {
+    outline: none;
+    box-shadow: var(--focus-ring);
+}
+
 .success-animation {
-    animation: successPulse var(--duration-normal) var(--ease-standard);
+    animation: successPulse 0.5s var(--ease-standard);
 }
 
 @keyframes successPulse {
@@ -951,16 +1012,16 @@ select.form-control {
     }
 }
 
-/* Mobile responsive styles for portrait orientation */
+/* Mobile responsive breakpoint at 480px */
 @media (max-width: 480px) {
     .login-content {
         padding: var(--space-16);
     }
 
     .login-container {
-        padding: var(--space-24);
-        max-width: 100%;
-        margin: 0 var(--space-8);
+        padding: var(--space-20);
+        margin: var(--space-8);
+        max-width: none;
     }
 
     .login-heading {
@@ -970,21 +1031,7 @@ select.form-control {
 
     .form-input {
         font-size: var(--font-size-base);
-        padding: var(--space-10);
-    }
-
-    .btn {
-        font-size: var(--font-size-base);
-        padding: var(--space-10);
-    }
-
-    .btn-resend {
-        font-size: var(--font-size-base);
-        padding: var(--space-10);
-    }
-
-    .otp-inputs {
-        gap: var(--space-6);
+        padding: var(--space-10) var(--space-12);
     }
 
     .otp-input {
@@ -993,12 +1040,26 @@ select.form-control {
         font-size: var(--font-size-2xl);
     }
 
-    .button-group {
-        flex-direction: column;
-        gap: var(--space-12);
+    .otp-inputs {
+        gap: var(--space-6);
     }
 
-    .btn-resend {
-        flex: none;
+    .btn {
+        padding: var(--space-10) var(--space-20);
+        font-size: var(--font-size-base);
+    }
+
+    .btn-resend,
+    .btn-verify {
+        padding: var(--space-10);
+        font-size: var(--font-size-base);
+    }
+
+    .button-group {
+        gap: var(--space-6);
+    }
+
+    .email-display {
+        font-size: var(--font-size-sm);
     }
 }

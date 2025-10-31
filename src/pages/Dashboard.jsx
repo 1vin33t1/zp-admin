@@ -1,10 +1,10 @@
 import './Dashboard.css'
 import TopBar from '../components/TopBar'
 
-const Dashboard = () => {
+const Dashboard = ({ userEmail, onLogout }) => {
     return (
         <div className="dashboard-container">
-            <TopBar />
+            <TopBar userEmail={userEmail} onLogout={onLogout} isLoggedIn={true} />
             <div className="dashboard-content">
                 <div className="dashboard-heading">Welcome to ZP-Admin Dashboard</div>
                 <div className="dashboard-text">

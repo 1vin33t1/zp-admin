@@ -184,7 +184,7 @@ const LoginPage = ({ onLoginSuccess }) => {
 
     return (
         <div className="login-page">
-            <TopBar />
+            <TopBar isLoggedIn={false} />
             <div className="login-content">
                 <div className="login-container">
                     <div className="login-heading">ZP-Admin Login</div>
@@ -204,8 +204,9 @@ const LoginPage = ({ onLoginSuccess }) => {
                                     placeholder="Enter your email"
                                     disabled={loading}
                                 />
-                                {emailError && <div className="error-message">{emailError}</div>}
                             </div>
+
+                            {emailError && <div className="error-message">{emailError}</div>}
 
                             <button className="btn btn-primary" onClick={handleSendOtp} disabled={loading}>
                                 {loading ? 'Sending...' : 'Send OTP'}
@@ -216,7 +217,7 @@ const LoginPage = ({ onLoginSuccess }) => {
                             <div className="email-display">
                                 {email.toLowerCase()}
                                 <a onClick={handleEditEmail} style={{ cursor: 'pointer' }}>
-                                    [edit]
+                                    edit
                                 </a>
                             </div>
 
@@ -237,17 +238,17 @@ const LoginPage = ({ onLoginSuccess }) => {
                                 ))}
                             </div>
 
-                            {otpError && <div className="error-message" style={{ textAlign: 'center' }}>{otpError}</div>}
+                            {otpError && <div className="error-message">{otpError}</div>}
 
                             <div className="button-group">
                                 <button
-                                    className="btn-resend"
+                                    className={`btn-resend ${remainingSeconds === 0 ? 'active' : ''}`}
                                     onClick={handleResendOtp}
                                     disabled={remainingSeconds > 0 || loading}
                                 >
-                                    {remainingSeconds > 0 ? `Resend OTP (${remainingSeconds}s)` : 'Resend OTP'}
+                                    {remainingSeconds > 0 ? `Resend (${remainingSeconds}s)` : 'Resend OTP'}
                                 </button>
-                                <button className="btn btn-primary" onClick={() => submitOtp()} disabled={otp.some((d) => !d) || loading}>
+                                <button className="btn-verify" onClick={() => submitOtp()} disabled={otp.some((d) => !d) || loading}>
                                     {loading ? 'Verifying...' : 'Verify OTP'}
                                 </button>
                             </div>
