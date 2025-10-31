@@ -1,8 +1,8 @@
 import { Link } from 'react-router-dom'
-import './PageTemplate.css'
-import TopBar from '../components/TopBar'
+import '../PageTemplate.css'
+import TopBar from '../../components/TopBar.jsx'
 
-const ViewStaff = ({ userEmail, onLogout }) => {
+const ViewAdmin = ({ userEmail, onLogout }) => {
     return (
         <div className="page-container">
             <TopBar userEmail={userEmail} onLogout={onLogout} isLoggedIn={true} />
@@ -10,13 +10,13 @@ const ViewStaff = ({ userEmail, onLogout }) => {
                 <Link to="/zp-admin/dashboard" className="back-button">
                     ← Back to Dashboard
                 </Link>
-                <div className="page-heading">View Staff</div>
+                <div className="page-heading">View Admins</div>
                 <div className="content-box">
                     <div className="empty-state">
-                        <div className="empty-state-icon">👥</div>
-                        <div className="empty-state-text">Staff List</div>
+                        <div className="empty-state-icon">🔐</div>
+                        <div className="empty-state-text">Admin List</div>
                         <div className="empty-state-description">
-                            Staff management interface will be displayed here.
+                            Admin management interface will be displayed here.
                         </div>
                     </div>
                 </div>
@@ -25,4 +25,4 @@ const ViewStaff = ({ userEmail, onLogout }) => {
     )
 }
 
-export default ViewStaff
+export default ViewAdmin

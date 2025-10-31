@@ -3,12 +3,13 @@ import { useState, useEffect } from 'react'
 import axios from 'axios'
 import './App.css'
 import LoginPage from './pages/LoginPage'
-import DashboardHome from './pages/Dashboard'
-import ViewStaff from './pages/ViewStaff'
-import AddStaff from './pages/AddStaff'
-import ViewAdmin from './pages/ViewAdmin'
-import AddAdmin from './pages/AddAdmin'
-import AddRegion from './pages/AddRegion'
+import DashboardHome from './pages/DashboardHome.jsx'
+import ViewStaff from './pages/staff/ViewStaff.jsx'
+import AddStaff from './pages/staff/AddStaff.jsx'
+import EditStaff from './pages/staff/EditStaff.jsx'
+import ViewAdmin from './pages/admin/ViewAdmin.jsx'
+import AddAdmin from './pages/admin/AddAdmin.jsx'
+import AddRegion from './pages/region/AddRegion.jsx'
 import ProtectedRoute from './components/ProtectedRoute'
 
 function App() {
@@ -85,6 +86,14 @@ function App() {
                 element={
                     <ProtectedRoute isAuthenticated={isAuthenticated} userEmail={userEmail} onLogout={handleLogout}>
                         <AddStaff userEmail={userEmail} onLogout={handleLogout} />
+                    </ProtectedRoute>
+                }
+            />
+            <Route
+                path="/zp-admin/staff/edit"
+                element={
+                    <ProtectedRoute isAuthenticated={isAuthenticated} userEmail={userEmail} onLogout={handleLogout}>
+                        <EditStaff userEmail={userEmail} onLogout={handleLogout} />
                     </ProtectedRoute>
                 }
             />

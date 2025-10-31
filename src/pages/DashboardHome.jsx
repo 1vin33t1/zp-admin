@@ -1,8 +1,8 @@
 import { Link } from 'react-router-dom'
-import './Dashboard.css'
+import './DashboardHome.css'
 import TopBar from '../components/TopBar'
 
-const Dashboard = ({ userEmail, onLogout }) => {
+const DashboardHome = ({ userEmail, onLogout }) => {
     const menuItems = [
         {
             id: 1,
@@ -60,4 +60,4 @@ const Dashboard = ({ userEmail, onLogout }) => {
     )
 }
 
-export default Dashboard
+export default DashboardHome

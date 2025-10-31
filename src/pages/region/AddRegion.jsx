@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom'
-import './PageTemplate.css'
-import TopBar from '../components/TopBar'
+import '../PageTemplate.css'
+import TopBar from '../../components/TopBar.jsx'
 
 const AddRegion = ({ userEmail, onLogout }) => {
     return (

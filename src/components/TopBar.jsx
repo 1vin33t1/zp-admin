@@ -1,8 +1,10 @@
 import { useState, useEffect } from 'react'
+import { Link, useNavigate } from 'react-router-dom'
 import './TopBar.css'
 
 const TopBar = ({ userEmail, onLogout, isLoggedIn }) => {
     const [remainingTime, setRemainingTime] = useState('15:00')
+    const navigate = useNavigate()
 
     useEffect(() => {
         if (!isLoggedIn) return
@@ -31,10 +33,21 @@ const TopBar = ({ userEmail, onLogout, isLoggedIn }) => {
         await onLogout()
     }
 
+    const handleBrandClick = () => {
+        navigate('/zp-admin/dashboard')
+    }
+
     return (
         <div className="top-bar">
             <div className="top-bar-left">
-                <div className="top-bar-brand">ग्राम समृद्धि</div>
+                <div className="top-bar-brand" onClick={handleBrandClick} style={{ cursor: 'pointer' }}>
+                    ग्राम समृद्धि
+                </div>
+                {isLoggedIn && (
+                    <Link to="/zp-admin/dashboard" className="dashboard-nav-link">
+                        Dashboard
+                    </Link>
+                )}
             </div>
 
             {isLoggedIn && (
