@@ -1,8 +1,7 @@
 import { Navigate, useNavigate } from 'react-router-dom'
 import { useEffect, useState } from 'react'
-import Dashboard from '../pages/Dashboard'
 
-const ProtectedRoute = ({ isAuthenticated, userEmail, onLogout }) => {
+const ProtectedRoute = ({ isAuthenticated, userEmail, onLogout, children }) => {
     const navigate = useNavigate()
     const [inactivityTimer, setInactivityTimer] = useState(null)
 
@@ -85,7 +84,7 @@ const ProtectedRoute = ({ isAuthenticated, userEmail, onLogout }) => {
         return <Navigate to="/zp-admin" replace />
     }
 
-    return <Dashboard userEmail={userEmail} onLogout={performLogout} />
+    return children
 }
 
 export default ProtectedRoute

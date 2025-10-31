@@ -3,7 +3,12 @@ import { useState, useEffect } from 'react'
 import axios from 'axios'
 import './App.css'
 import LoginPage from './pages/LoginPage'
-import Dashboard from './pages/Dashboard'
+import DashboardHome from './pages/Dashboard'
+import ViewStaff from './pages/ViewStaff'
+import AddStaff from './pages/AddStaff'
+import ViewAdmin from './pages/ViewAdmin'
+import AddAdmin from './pages/AddAdmin'
+import AddRegion from './pages/AddRegion'
 import ProtectedRoute from './components/ProtectedRoute'
 
 function App() {
@@ -62,7 +67,49 @@ function App() {
             <Route
                 path="/zp-admin/dashboard"
                 element={
-                    <ProtectedRoute isAuthenticated={isAuthenticated} userEmail={userEmail} onLogout={handleLogout} />
+                    <ProtectedRoute isAuthenticated={isAuthenticated} userEmail={userEmail} onLogout={handleLogout}>
+                        <DashboardHome userEmail={userEmail} onLogout={handleLogout} />
+                    </ProtectedRoute>
+                }
+            />
+            <Route
+                path="/zp-admin/staff/view"
+                element={
+                    <ProtectedRoute isAuthenticated={isAuthenticated} userEmail={userEmail} onLogout={handleLogout}>
+                        <ViewStaff userEmail={userEmail} onLogout={handleLogout} />
+                    </ProtectedRoute>
+                }
+            />
+            <Route
+                path="/zp-admin/staff/add"
+                element={
+                    <ProtectedRoute isAuthenticated={isAuthenticated} userEmail={userEmail} onLogout={handleLogout}>
+                        <AddStaff userEmail={userEmail} onLogout={handleLogout} />
+                    </ProtectedRoute>
+                }
+            />
+            <Route
+                path="/zp-admin/admin/view"
+                element={
+                    <ProtectedRoute isAuthenticated={isAuthenticated} userEmail={userEmail} onLogout={handleLogout}>
+                        <ViewAdmin userEmail={userEmail} onLogout={handleLogout} />
+                    </ProtectedRoute>
+                }
+            />
+            <Route
+                path="/zp-admin/admin/add"
+                element={
+                    <ProtectedRoute isAuthenticated={isAuthenticated} userEmail={userEmail} onLogout={handleLogout}>
+                        <AddAdmin userEmail={userEmail} onLogout={handleLogout} />
+                    </ProtectedRoute>
+                }
+            />
+            <Route
+                path="/zp-admin/region/add"
+                element={
+                    <ProtectedRoute isAuthenticated={isAuthenticated} userEmail={userEmail} onLogout={handleLogout}>
+                        <AddRegion userEmail={userEmail} onLogout={handleLogout} />
+                    </ProtectedRoute>
                 }
             />
             <Route path="*" element={<Navigate to="/zp-admin" replace />} />
