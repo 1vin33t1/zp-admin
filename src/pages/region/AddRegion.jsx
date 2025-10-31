@@ -9,6 +9,7 @@ const AddRegion = ({ userEmail, onLogout }) => {
   const [regionName, setRegionName] = useState('')
   const [error, setError] = useState('')
   const [isSubmitting, setIsSubmitting] = useState(false)
+  const [showConfirmModal, setShowConfirmModal] = useState(false)
 
   const validateForm = () => {
     if (!regionName.trim()) {
@@ -24,13 +25,18 @@ const AddRegion = ({ userEmail, onLogout }) => {
     return true
   }
 
-  const handleAddRegionClick = async () => {
+  const handleAddRegionClick = () => {
     setError('')
 
     if (!validateForm()) {
       return
     }
 
+    setShowConfirmModal(true)
+  }
+
+  const handleConfirmAdd = async () => {
+    setShowConfirmModal(false)
     setIsSubmitting(true)
 
     try {
@@ -107,6 +113,35 @@ const AddRegion = ({ userEmail, onLogout }) => {
           </div>
         </div>
       </div>
+
+      {/* Confirm Add Modal */}
+      {showConfirmModal && (
+        <div className="modal-overlay">
+          <div className="modal-content">
+            <div className="modal-header">Confirm Add Region</div>
+            <div className="modal-body">
+              <p>You are about to add region:</p>
+              <div className="modal-details">
+                <p className="region-name-display">{regionName}</p>
+              </div>
+            </div>
+            <div className="modal-footer">
+              <button
+                className="modal-btn-cancel"
+                onClick={() => setShowConfirmModal(false)}
+              >
+                Go Back
+              </button>
+              <button
+                className="modal-btn-confirm"
+                onClick={handleConfirmAdd}
+              >
+                Yes
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   )
 }

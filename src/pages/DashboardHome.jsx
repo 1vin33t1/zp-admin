@@ -41,6 +41,13 @@ const DashboardHome = ({ userEmail, onLogout }) => {
       icon: '👤',
       path: '/admin/add',
     },
+    {
+      id: 6,
+      title: 'Activity Stream',
+      description: 'View system activity logs',
+      icon: '📊',
+      path: '/activity',
+    },
   ]
 
   return (

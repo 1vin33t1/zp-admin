@@ -11,6 +11,7 @@ import ViewAdmin from './pages/admin/ViewAdmin'
 import AddAdmin from './pages/admin/AddAdmin'
 import EditAdmin from './pages/admin/EditAdmin'
 import AddRegion from './pages/region/AddRegion'
+import ActivityStream from './pages/ActivityStream'
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(null)
@@ -152,6 +153,18 @@ function App() {
         element={
           isAuthenticated ? (
             <AddRegion userEmail={userEmail} onLogout={handleLogout} />
+          ) : (
+            <Navigate to="/" replace />
+          )
+        }
+      />
+
+      {/* Activity Route */}
+      <Route
+        path="/activity"
+        element={
+          isAuthenticated ? (
+            <ActivityStream userEmail={userEmail} onLogout={handleLogout} />
           ) : (
             <Navigate to="/" replace />
           )
