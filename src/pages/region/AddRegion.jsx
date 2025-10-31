@@ -1,28 +1,114 @@
-import { Link } from 'react-router-dom'
-import '../PageTemplate.css'
-import TopBar from '../../components/TopBar.jsx'
+import { useNavigate } from 'react-router-dom'
+import { useState } from 'react'
+import axios from 'axios'
+import './AddRegion.css'
+import TopBar from '../../components/TopBar'
 
 const AddRegion = ({ userEmail, onLogout }) => {
-    return (
-        <div className="page-container">
-            <TopBar userEmail={userEmail} onLogout={onLogout} isLoggedIn={true} />
-            <div className="page-content">
-                <Link to="/zp-admin/dashboard" className="back-button">
-                    ← Back to Dashboard
-                </Link>
-                <div className="page-heading">Add Region</div>
-                <div className="content-box">
-                    <div className="empty-state">
-                        <div className="empty-state-icon">🌍</div>
-                        <div className="empty-state-text">Add New Region</div>
-                        <div className="empty-state-description">
-                            Region addition form will be displayed here.
-                        </div>
-                    </div>
-                </div>
+  const navigate = useNavigate()
+  const [regionName, setRegionName] = useState('')
+  const [error, setError] = useState('')
+  const [isSubmitting, setIsSubmitting] = useState(false)
+
+  const validateForm = () => {
+    if (!regionName.trim()) {
+      setError('Region name is required')
+      return false
+    }
+
+    if (regionName.trim().length < 3) {
+      setError('Region name must be at least 3 characters long')
+      return false
+    }
+
+    return true
+  }
+
+  const handleAddRegionClick = async () => {
+    setError('')
+
+    if (!validateForm()) {
+      return
+    }
+
+    setIsSubmitting(true)
+
+    try {
+      const response = await axios.post(
+        'https://api.pranvidyatech.in/auth/region',
+        {
+          type: 'applicant',
+          regionName: regionName.trim(),
+        },
+        { withCredentials: true }
+      )
+
+      if (response.data.success) {
+        // Redirect to dashboard
+        navigate('/dashboard')
+      } else {
+        setError(response.data.failureReason || 'Failed to add region')
+      }
+    } catch (err) {
+      setError(err.response?.data?.failureReason || 'Failed to add region')
+    } finally {
+      setIsSubmitting(false)
+    }
+  }
+
+  return (
+    <div className="page-container">
+      <TopBar userEmail={userEmail} onLogout={onLogout} isLoggedIn={true} />
+      <div className="page-content">
+        <button onClick={() => navigate('/dashboard')} className="back-button">
+          ← Back to Dashboard
+        </button>
+
+        <div className="page-heading">Add Region</div>
+
+        {error && <div className="error-message">{error}</div>}
+
+        <div className="add-form-container">
+          <div className="form-section">
+            <div className="form-group">
+              <label className="form-label">Region Name *</label>
+              <input
+                type="text"
+                value={regionName}
+                onChange={(e) => {
+                  setRegionName(e.target.value)
+                  setError('')
+                }}
+                className="form-input"
+                placeholder="Enter region name (minimum 3 characters)"
+                disabled={isSubmitting}
+              />
+              <div className="form-hint">
+                Minimum 3 characters required
+              </div>
             </div>
+          </div>
+
+          <div className="button-group">
+            <button
+              onClick={() => navigate('/dashboard')}
+              className="btn-cancel"
+              disabled={isSubmitting}
+            >
+              Back to Dashboard
+            </button>
+            <button
+              onClick={handleAddRegionClick}
+              className="btn-add"
+              disabled={isSubmitting}
+            >
+              {isSubmitting ? 'Adding...' : 'Add Region'}
+            </button>
+          </div>
         </div>
-    )
+      </div>
+    </div>
+  )
 }
 
 export default AddRegion

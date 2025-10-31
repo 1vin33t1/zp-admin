@@ -9,8 +9,8 @@ import AddStaff from './pages/staff/AddStaff'
 import EditStaff from './pages/staff/EditStaff'
 import ViewAdmin from './pages/admin/ViewAdmin'
 import AddAdmin from './pages/admin/AddAdmin'
+import EditAdmin from './pages/admin/EditAdmin'
 import AddRegion from './pages/region/AddRegion'
-import ProtectedRoute from './components/ProtectedRoute'
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(null)
@@ -130,6 +130,16 @@ function App() {
         element={
           isAuthenticated ? (
             <AddAdmin userEmail={userEmail} onLogout={handleLogout} />
+          ) : (
+            <Navigate to="/" replace />
+          )
+        }
+      />
+      <Route
+        path="/admin/edit"
+        element={
+          isAuthenticated ? (
+            <EditAdmin userEmail={userEmail} onLogout={handleLogout} />
           ) : (
             <Navigate to="/" replace />
           )

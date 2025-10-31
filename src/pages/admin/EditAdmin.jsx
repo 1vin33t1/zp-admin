@@ -1,63 +1,56 @@
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useLocation } from 'react-router-dom'
 import { useState, useEffect } from 'react'
 import axios from 'axios'
-import './AddAdmin.css'
+import './EditAdmin.css'
 import TopBar from '../../components/TopBar'
 
-const AddAdmin = ({ userEmail, onLogout }) => {
+const EditAdmin = ({ userEmail, onLogout }) => {
   const navigate = useNavigate()
-  const [email, setEmail] = useState('')
+  const location = useLocation()
   const [name, setName] = useState('')
-  const [loading, setLoading] = useState(false)
+  const [email, setEmail] = useState('')
+  const [originalEmail, setOriginalEmail] = useState('')
+  const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
   const [showConfirmModal, setShowConfirmModal] = useState(false)
   const [showSuccessModal, setShowSuccessModal] = useState(false)
   const [isSubmitting, setIsSubmitting] = useState(false)
 
-  // Email validation regex
-  const validateEmail = (email) => {
-    const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
-    return re.test(email)
-  }
+  // Get admin data from location state
+  const adminData = location.state?.admin
 
-  const validateForm = () => {
-    if (!email.trim()) {
-      setError('Email is required')
-      return false
-    }
-
-    if (!validateEmail(email)) {
-      setError('Please enter a valid email address')
-      return false
-    }
-
-    if (!name.trim()) {
-      setError('Name is required')
-      return false
-    }
-
-    return true
-  }
-
-  const handleAddAdminClick = () => {
-    setError('')
-
-    if (!validateForm()) {
+  useEffect(() => {
+    if (!adminData) {
+      setError('No admin data provided')
+      setLoading(false)
       return
     }
 
+    setName(adminData.name)
+    setEmail(adminData.email)
+    setOriginalEmail(adminData.email)
+    setLoading(false)
+  }, [adminData])
+
+  const handleUpdateClick = () => {
+    if (!name.trim()) {
+      setError('Name cannot be empty')
+      return
+    }
+
+    setError('')
     setShowConfirmModal(true)
   }
 
-  const handleConfirmAdd = async () => {
+  const handleConfirmUpdate = async () => {
     setShowConfirmModal(false)
     setIsSubmitting(true)
 
     try {
-      const response = await axios.post(
+      const response = await axios.put(
         'https://api.pranvidyatech.in/auth/staff',
         {
-          email: email,
+          email: originalEmail,
           role: 'ZP_ADMIN',
           name: name,
         },
@@ -67,55 +60,75 @@ const AddAdmin = ({ userEmail, onLogout }) => {
       if (response.data.success) {
         setShowSuccessModal(true)
         setTimeout(() => {
-          navigate('/dashboard')
+          navigate('/admin/view')
         }, 2000)
       } else {
-        setError(response.data.failureReason || 'Failed to add admin')
+        setError(response.data.failureReason || 'Failed to update admin')
       }
     } catch (err) {
-      setError(err.response?.data?.failureReason || 'Failed to add admin')
+      setError(err.response?.data?.failureReason || 'Failed to update admin')
     } finally {
       setIsSubmitting(false)
     }
+  }
+
+  if (loading) {
+    return (
+      <div className="page-container">
+        <TopBar userEmail={userEmail} onLogout={onLogout} isLoggedIn={true} />
+        <div className="page-content">
+          <div style={{ textAlign: 'center', padding: '48px' }}>Loading...</div>
+        </div>
+      </div>
+    )
+  }
+
+  if (error && !adminData) {
+    return (
+      <div className="page-container">
+        <TopBar userEmail={userEmail} onLogout={onLogout} isLoggedIn={true} />
+        <div className="page-content">
+          <div className="error-message">{error}</div>
+          <button onClick={() => navigate('/admin/view')} className="btn-back-error">
+            Go Back to Admin List
+          </button>
+        </div>
+      </div>
+    )
   }
 
   return (
     <div className="page-container">
       <TopBar userEmail={userEmail} onLogout={onLogout} isLoggedIn={true} />
       <div className="page-content">
-        <button onClick={() => navigate('/dashboard')} className="back-button">
-          ← Back to Dashboard
+        <button onClick={() => navigate('/admin/view')} className="back-button">
+          ← Back to Admin List
         </button>
 
-        <div className="page-heading">Add Admin</div>
+        <div className="page-heading">Edit Admin</div>
 
         {error && <div className="error-message">{error}</div>}
 
-        <div className="add-form-container">
+        <div className="edit-form-container">
           <div className="form-section">
             <div className="form-group">
-              <label className="form-label">Email Address *</label>
+              <label className="form-label">Email Address</label>
               <input
                 type="email"
                 value={email}
-                onChange={(e) => {
-                  setEmail(e.target.value)
-                  setError('')
-                }}
-                className="form-input"
-                placeholder="Enter admin email"
+                disabled
+                className="form-input form-input-disabled"
+                placeholder="Email (cannot be edited)"
               />
+              <div className="form-hint">Email address cannot be changed</div>
             </div>
 
             <div className="form-group">
-              <label className="form-label">Name *</label>
+              <label className="form-label">Name</label>
               <input
                 type="text"
                 value={name}
-                onChange={(e) => {
-                  setName(e.target.value)
-                  setError('')
-                }}
+                onChange={(e) => setName(e.target.value)}
                 className="form-input"
                 placeholder="Enter admin name"
               />
@@ -124,29 +137,29 @@ const AddAdmin = ({ userEmail, onLogout }) => {
 
           <div className="button-group">
             <button
-              onClick={() => navigate('/dashboard')}
+              onClick={() => navigate('/admin/view')}
               className="btn-cancel"
             >
-              Back to Dashboard
+              Back to List
             </button>
             <button
-              onClick={handleAddAdminClick}
-              className="btn-add"
+              onClick={handleUpdateClick}
+              className="btn-update"
               disabled={isSubmitting}
             >
-              {isSubmitting ? 'Adding...' : 'Add Admin'}
+              {isSubmitting ? 'Updating...' : 'Update Admin'}
             </button>
           </div>
         </div>
       </div>
 
-      {/* Confirm Add Modal */}
+      {/* Confirm Update Modal */}
       {showConfirmModal && (
         <div className="modal-overlay">
           <div className="modal-content">
-            <div className="modal-header">Confirm Add Admin</div>
+            <div className="modal-header">Confirm Update</div>
             <div className="modal-body">
-              <p>Are you sure you want to add this admin?</p>
+              <p>Are you sure you want to update this admin?</p>
               <div className="modal-details">
                 <p>
                   <strong>Email:</strong> {email}
@@ -165,9 +178,9 @@ const AddAdmin = ({ userEmail, onLogout }) => {
               </button>
               <button
                 className="modal-btn-confirm"
-                onClick={handleConfirmAdd}
+                onClick={handleConfirmUpdate}
               >
-                Yes, Add
+                Yes, Update
               </button>
             </div>
           </div>
@@ -179,9 +192,9 @@ const AddAdmin = ({ userEmail, onLogout }) => {
         <div className="modal-overlay">
           <div className="modal-content modal-success">
             <div className="success-icon">✓</div>
-            <div className="modal-header">Successfully Added</div>
+            <div className="modal-header">Successfully Updated</div>
             <div className="modal-body">
-              <p>Admin has been added successfully!</p>
+              <p>Admin has been updated successfully!</p>
             </div>
           </div>
         </div>
@@ -190,4 +203,4 @@ const AddAdmin = ({ userEmail, onLogout }) => {
   )
 }
 
-export default AddAdmin
+export default EditAdmin
