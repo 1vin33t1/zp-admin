@@ -3,9 +3,13 @@ import { useNavigate } from 'react-router-dom'
 import axios from 'axios'
 import './ViewStaff.css'
 import TopBar from '../../components/TopBar'
+import { useLanguage } from '../../context/LanguageContext'
+import { t } from '../../utils/translations'
+import { createAxiosInstance } from '../../utils/apiUtils'
 
 const ViewStaff = ({ userEmail, onLogout }) => {
   const navigate = useNavigate()
+  const { language, getLanguageCode } = useLanguage()
   const [staff, setStaff] = useState([])
   const [filteredStaff, setFilteredStaff] = useState([])
   const [loading, setLoading] = useState(false)
@@ -21,31 +25,24 @@ const ViewStaff = ({ userEmail, onLogout }) => {
 
   const itemsPerPage = 10
 
-  // Fetch staff data
   useEffect(() => {
     fetchStaff()
     fetchRegions()
-  }, [])
+  }, [language])
 
-  // Apply filters and search
   useEffect(() => {
     let result = [...staff]
 
-    // Search by name
     if (searchTerm) {
       result = result.filter((s) =>
         s.name.toLowerCase().includes(searchTerm.toLowerCase())
       )
     }
 
-    // Filter by region
     if (selectedRegion) {
-      result = result.filter((s) =>
-        s.region.includes(selectedRegion)
-      )
+      result = result.filter((s) => s.region.includes(selectedRegion))
     }
 
-    // Sort
     if (sortBy === 'name-asc') {
       result.sort((a, b) => a.name.localeCompare(b.name))
     } else if (sortBy === 'name-desc') {
@@ -64,13 +61,13 @@ const ViewStaff = ({ userEmail, onLogout }) => {
     setLoading(true)
     setError('')
     try {
-      const response = await axios.get(
-        'https://api.gramsamruddhi.in/auth/all/staff?role=ZP_STAFF',
-        { withCredentials: true }
+      const apiInstance = createAxiosInstance(getLanguageCode())
+      const response = await apiInstance.get(
+        'https://api.pranvidyatech.in/auth/all/staff?role=ZP_STAFF'
       )
       setStaff(response.data.staff || [])
     } catch (err) {
-      setError('Failed to fetch staff data')
+      setError(t('staffListError', language))
       console.error(err)
     } finally {
       setLoading(false)
@@ -79,9 +76,9 @@ const ViewStaff = ({ userEmail, onLogout }) => {
 
   const fetchRegions = async () => {
     try {
-      const response = await axios.get(
-        'https://api.gramsamruddhi.in/auth/all/region?type=applicant',
-        { withCredentials: true }
+      const apiInstance = createAxiosInstance(getLanguageCode())
+      const response = await apiInstance.get(
+        'https://api.pranvidyatech.in/auth/all/region?type=applicant'
       )
       setRegions(response.data.region || [])
     } catch (err) {
@@ -102,33 +99,34 @@ const ViewStaff = ({ userEmail, onLogout }) => {
     if (!deleteTarget) return
 
     try {
-      const response = await axios.delete(
-        'https://api.gramsamruddhi.in/auth/staff',
+      const apiInstance = createAxiosInstance(getLanguageCode())
+      const response = await apiInstance.delete(
+        'https://api.pranvidyatech.in/auth/staff',
         {
           data: {
             email: deleteTarget.email,
             role: 'ZP_STAFF',
           },
-          withCredentials: true,
         }
       )
 
       if (response.data.success) {
         setStaff((prev) => prev.filter((s) => s.email !== deleteTarget.email))
-        setSuccessMessage(`Successfully deleted ${deleteTarget.name}`)
+        setSuccessMessage(
+          `${t('successfullyDeleted', language)} ${deleteTarget.name}`
+        )
         setTimeout(() => setSuccessMessage(''), 3000)
       } else {
-        setError(response.data.failureReason || 'Failed to delete staff')
+        setError(response.data.failureReason || t('error', language))
       }
     } catch (err) {
-      setError(err.response?.data?.failureReason || 'Failed to delete staff')
+      setError(err.response?.data?.failureReason || t('error', language))
     } finally {
       setShowDeleteModal(false)
       setDeleteTarget(null)
     }
   }
 
-  // Pagination
   const totalPages = Math.ceil(filteredStaff.length / itemsPerPage)
   const startIdx = (currentPage - 1) * itemsPerPage
   const paginatedStaff = filteredStaff.slice(startIdx, startIdx + itemsPerPage)
@@ -138,7 +136,9 @@ const ViewStaff = ({ userEmail, onLogout }) => {
       <div className="page-container">
         <TopBar userEmail={userEmail} onLogout={onLogout} isLoggedIn={true} />
         <div className="page-content">
-          <div style={{ textAlign: 'center', padding: '48px' }}>Loading...</div>
+          <div style={{ textAlign: 'center', padding: '48px' }}>
+            {t('loading', language)}
+          </div>
         </div>
       </div>
     )
@@ -149,10 +149,10 @@ const ViewStaff = ({ userEmail, onLogout }) => {
       <TopBar userEmail={userEmail} onLogout={onLogout} isLoggedIn={true} />
       <div className="page-content">
         <button onClick={() => navigate('/dashboard')} className="back-button">
-          ← Back to Dashboard
+          ← {t('backToDashboard', language)}
         </button>
 
-        <div className="page-heading">View Staff</div>
+        <div className="page-heading">{t('staffList', language)}</div>
 
         {error && <div className="error-message">{error}</div>}
         {successMessage && <div className="success-message">{successMessage}</div>}
@@ -162,7 +162,7 @@ const ViewStaff = ({ userEmail, onLogout }) => {
             <div className="search-box">
               <input
                 type="text"
-                placeholder="Search by name..."
+                placeholder={t('searchByName', language)}
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
                 className="search-input"
@@ -175,7 +175,7 @@ const ViewStaff = ({ userEmail, onLogout }) => {
                 onChange={(e) => setSelectedRegion(e.target.value)}
                 className="filter-select"
               >
-                <option value="">All Regions</option>
+                <option value="">{t('allRegions', language)}</option>
                 {regions.map((region) => (
                   <option key={region} value={region}>
                     {region}
@@ -190,11 +190,11 @@ const ViewStaff = ({ userEmail, onLogout }) => {
                 onChange={(e) => setSortBy(e.target.value)}
                 className="sort-select"
               >
-                <option value="">Sort By</option>
-                <option value="name-asc">Name (A-Z)</option>
-                <option value="name-desc">Name (Z-A)</option>
-                <option value="email-asc">Email (A-Z)</option>
-                <option value="email-desc">Email (Z-A)</option>
+                <option value="">{t('sortBy', language)}</option>
+                <option value="name-asc">{t('nameAZ', language)}</option>
+                <option value="name-desc">{t('nameZA', language)}</option>
+                <option value="email-asc">{t('emailAZ', language)}</option>
+                <option value="email-desc">{t('emailZA', language)}</option>
               </select>
             </div>
           </div>
@@ -204,11 +204,11 @@ const ViewStaff = ({ userEmail, onLogout }) => {
           <table className="staff-table">
             <thead>
               <tr>
-                <th>S.No.</th>
-                <th>Name</th>
-                <th>Email</th>
-                <th>Region</th>
-                <th>Actions</th>
+                <th>{t('sNo', language)}</th>
+                <th>{t('name', language)}</th>
+                <th>{t('email', language)}</th>
+                <th>{t('region', language)}</th>
+                <th>{t('actions', language)}</th>
               </tr>
             </thead>
             <tbody>
@@ -224,13 +224,13 @@ const ViewStaff = ({ userEmail, onLogout }) => {
                         className="btn-edit"
                         onClick={() => handleEditClick(staffMember)}
                       >
-                        Edit
+                        {t('edit', language)}
                       </button>
                       <button
                         className="btn-delete"
                         onClick={() => handleDeleteClick(staffMember)}
                       >
-                        Delete
+                        {t('delete', language)}
                       </button>
                     </td>
                   </tr>
@@ -238,7 +238,7 @@ const ViewStaff = ({ userEmail, onLogout }) => {
               ) : (
                 <tr>
                   <td colSpan="5" className="empty-cell">
-                    No staff members found
+                    {t('noStaffFound', language)}
                   </td>
                 </tr>
               )}
@@ -253,17 +253,17 @@ const ViewStaff = ({ userEmail, onLogout }) => {
               onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
               disabled={currentPage === 1}
             >
-              Previous
+              {t('previous', language)}
             </button>
             <span className="pagination-info">
-              Page {currentPage} of {totalPages}
+              {t('page', language)} {currentPage} {t('of', language)} {totalPages}
             </span>
             <button
               className="pagination-btn"
               onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
               disabled={currentPage === totalPages}
             >
-              Next
+              {t('next', language)}
             </button>
           </div>
         )}
@@ -272,15 +272,15 @@ const ViewStaff = ({ userEmail, onLogout }) => {
       {showDeleteModal && (
         <div className="modal-overlay">
           <div className="modal-content">
-            <div className="modal-header">Confirm Delete</div>
+            <div className="modal-header">{t('confirmDelete', language)}</div>
             <div className="modal-body">
-              <p>Are you sure you want to delete this staff member?</p>
+              <p>{t('areYouSureDelete', language)}</p>
               <div className="modal-details">
                 <p>
-                  <strong>Name:</strong> {deleteTarget?.name}
+                  <strong>{t('name', language)}:</strong> {deleteTarget?.name}
                 </p>
                 <p>
-                  <strong>Email:</strong> {deleteTarget?.email}
+                  <strong>{t('email', language)}:</strong> {deleteTarget?.email}
                 </p>
               </div>
             </div>
@@ -292,13 +292,13 @@ const ViewStaff = ({ userEmail, onLogout }) => {
                   setDeleteTarget(null)
                 }}
               >
-                No
+                {t('no', language)}
               </button>
               <button
                 className="modal-btn-confirm"
                 onClick={handleConfirmDelete}
               >
-                Yes
+                {t('yes', language)}
               </button>
             </div>
           </div>

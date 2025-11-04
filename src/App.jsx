@@ -24,7 +24,7 @@ function App() {
 
   const checkAuthStatus = async () => {
     try {
-      const response = await axios.get('https://api.gramsamruddhi.in/auth/status/admin', {
+      const response = await axios.get('https://api.pranvidyatech.in/auth/status/admin', {
         withCredentials: true,
       })
       if (response.data.status === true) {
@@ -42,7 +42,7 @@ function App() {
 
   const handleLogout = async () => {
     try {
-      await axios.post('https://api.gramsamruddhi.in/auth/logout/zp-admin', {}, {
+      await axios.post('https://api.pranvidyatech.in/auth/logout/zp-admin', {}, {
         withCredentials: true,
       })
     } catch (error) {

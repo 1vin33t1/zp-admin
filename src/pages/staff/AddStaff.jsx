@@ -30,7 +30,7 @@ const AddStaff = ({ userEmail, onLogout }) => {
   const fetchRegions = async () => {
     try {
       const response = await axios.get(
-        'https://api.gramsamruddhi.in/auth/all/region?type=applicant',
+        'https://api.pranvidyatech.in/auth/all/region?type=applicant',
         { withCredentials: true }
       )
       setRegions(response.data.region || [])
@@ -90,7 +90,7 @@ const AddStaff = ({ userEmail, onLogout }) => {
 
     try {
       const response = await axios.post(
-        'https://api.gramsamruddhi.in/auth/staff',
+        'https://api.pranvidyatech.in/auth/staff',
         {
           email: email,
           role: 'ZP_STAFF',

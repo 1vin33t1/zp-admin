@@ -49,7 +49,7 @@ const ProtectedRoute = ({ isAuthenticated, userEmail, onLogout, children }) => {
         const handleVisibilityChange = async () => {
             if (document.visibilityState === "hidden") {
                 try {
-                    await fetch('https://api.gramsamruddhi.in/auth/logout/zp-admin', {
+                    await fetch('https://api.pranvidyatech.in/auth/logout/zp-admin', {
                         method: 'POST',
                         credentials: 'include',
                     })

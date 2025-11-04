@@ -1,15 +1,18 @@
 import { useNavigate } from 'react-router-dom'
 import './TopBar.css'
 import { useState, useEffect } from 'react'
+import { useLanguage } from '../context/LanguageContext'
+import { t } from '../utils/translations'
 
 const TopBar = ({ userEmail, onLogout, isLoggedIn }) => {
   const [remainingTime, setRemainingTime] = useState('15:00')
   const navigate = useNavigate()
+  const { language, setLanguage } = useLanguage()
 
   useEffect(() => {
     if (!isLoggedIn) return
 
-    const INACTIVITY_TIMEOUT = 15 * 60 // 15 minutes in seconds
+    const INACTIVITY_TIMEOUT = 15 * 60
     let timeRemaining = INACTIVITY_TIMEOUT
 
     const interval = setInterval(() => {
@@ -58,20 +61,33 @@ const TopBar = ({ userEmail, onLogout, isLoggedIn }) => {
               cursor: 'pointer',
             }}
           >
-            Dashboard
+            {t('dashboard', language)}
           </button>
         )}
       </div>
 
       {isLoggedIn && (
         <div className="top-bar-right">
+          <div className="language-selector">
+            <select
+              value={language}
+              onChange={(e) => setLanguage(e.target.value)}
+              className="language-dropdown"
+              title="Select Language"
+            >
+              <option value="en">English</option>
+              <option value="hi">हिंदी</option>
+              <option value="mr">मराठी</option>
+            </select>
+          </div>
+
           <div className="activity-timer">
-            Session timeout: {remainingTime}
+            {t('sessionTimeout', language)} {remainingTime}
           </div>
           <div className="user-info">
             <div className="user-email">{userEmail}</div>
             <button className="logout-btn" onClick={handleLogout}>
-              Logout
+              {t('logout', language)}
             </button>
           </div>
         </div>

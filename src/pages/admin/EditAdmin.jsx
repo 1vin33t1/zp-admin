@@ -48,7 +48,7 @@ const EditAdmin = ({ userEmail, onLogout }) => {
 
     try {
       const response = await axios.put(
-        'https://api.gramsamruddhi.in/auth/staff',
+        'https://api.pranvidyatech.in/auth/staff',
         {
           email: originalEmail,
           role: 'ZP_ADMIN',
