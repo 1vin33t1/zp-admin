@@ -63,7 +63,7 @@ const ViewStaff = ({ userEmail, onLogout }) => {
     try {
       const apiInstance = createAxiosInstance(getLanguageCode())
       const response = await apiInstance.get(
-        'https://api.pranvidyatech.in/auth/all/staff?role=ZP_STAFF'
+        'https://api.gramsamruddhi.in/auth/all/staff?role=ZP_STAFF'
       )
       setStaff(response.data.staff || [])
     } catch (err) {
@@ -78,7 +78,7 @@ const ViewStaff = ({ userEmail, onLogout }) => {
     try {
       const apiInstance = createAxiosInstance(getLanguageCode())
       const response = await apiInstance.get(
-        'https://api.pranvidyatech.in/auth/all/region?type=applicant'
+        'https://api.gramsamruddhi.in/auth/all/region?type=applicant'
       )
       setRegions(response.data.region || [])
     } catch (err) {
@@ -101,7 +101,7 @@ const ViewStaff = ({ userEmail, onLogout }) => {
     try {
       const apiInstance = createAxiosInstance(getLanguageCode())
       const response = await apiInstance.delete(
-        'https://api.pranvidyatech.in/auth/staff',
+        'https://api.gramsamruddhi.in/auth/staff',
         {
           data: {
             email: deleteTarget.email,

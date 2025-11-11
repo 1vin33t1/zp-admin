@@ -30,10 +30,14 @@ const AddStaff = ({ userEmail, onLogout }) => {
   const fetchRegions = async () => {
     try {
       const response = await axios.get(
-        'https://api.pranvidyatech.in/auth/all/region?type=applicant',
+        'https://api.gramsamruddhi.in/auth/all/region?type=applicant',
         { withCredentials: true }
       )
-      setRegions(response.data.region || [])
+      const sortedRegions = regions.sort((a, b) => {
+        return a.localeCompare(b);
+      });
+
+      setRegions(sortedRegions || [])
     } catch (err) {
       console.error('Failed to fetch regions:', err)
       setError('Failed to fetch regions')
@@ -90,7 +94,7 @@ const AddStaff = ({ userEmail, onLogout }) => {
 
     try {
       const response = await axios.post(
-        'https://api.pranvidyatech.in/auth/staff',
+        'https://api.gramsamruddhi.in/auth/staff',
         {
           email: email,
           role: 'ZP_STAFF',

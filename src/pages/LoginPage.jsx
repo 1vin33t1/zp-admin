@@ -39,7 +39,7 @@ const LoginPage = ({ onLoginSuccess }) => {
         setLoading(true)
         try {
             const response = await axios.post(
-                `https://api.pranvidyatech.in/auth/send-otp?role=ZP_ADMIN&email=${encodeURIComponent(email)}`,
+                `https://api.gramsamruddhi.in/auth/send-otp?role=ZP_ADMIN&email=${encodeURIComponent(email)}`,
                 {},
                 { withCredentials: true }
             )
@@ -96,7 +96,7 @@ const LoginPage = ({ onLoginSuccess }) => {
         setLoading(true)
         try {
             const response = await axios.post(
-                `https://api.pranvidyatech.in/auth/verify-otp?role=ZP_ADMIN&email=${encodeURIComponent(email)}&otp=${otpCode}`,
+                `https://api.gramsamruddhi.in/auth/verify-otp?role=ZP_ADMIN&email=${encodeURIComponent(email)}&otp=${otpCode}`,
                 {},
                 { withCredentials: true }
             )
@@ -145,7 +145,7 @@ const LoginPage = ({ onLoginSuccess }) => {
         setLoading(true)
         try {
             const response = await axios.post(
-                `https://api.pranvidyatech.in/auth/send-otp?role=ZP_ADMIN&email=${encodeURIComponent(email)}`,
+                `https://api.gramsamruddhi.in/auth/send-otp?role=ZP_ADMIN&email=${encodeURIComponent(email)}`,
                 {},
                 { withCredentials: true }
             )

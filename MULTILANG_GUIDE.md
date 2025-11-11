@@ -44,7 +44,7 @@ const MyComponent = () => {
   // Making API calls with Accept-Language header
   const fetchData = async () => {
     const apiInstance = createAxiosInstance(getLanguageCode())
-    const response = await apiInstance.get('https://api.pranvidyatech.in/...')
+    const response = await apiInstance.get('https://api.gramsamruddhi.in/...')
   }
 
   return <div>{heading}</div>

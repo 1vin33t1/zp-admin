@@ -41,7 +41,7 @@ const AddRegion = ({ userEmail, onLogout }) => {
 
     try {
       const response = await axios.post(
-        'https://api.pranvidyatech.in/auth/region',
+        'https://api.gramsamruddhi.in/auth/region',
         {
           type: 'applicant',
           regionName: regionName.trim(),
