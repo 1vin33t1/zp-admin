@@ -33,7 +33,7 @@ const AddStaff = ({ userEmail, onLogout }) => {
         'https://api.gramsamruddhi.in/auth/all/region?type=applicant',
         { withCredentials: true }
       )
-      const sortedRegions = regions.sort((a, b) => {
+      const sortedRegions = response.data.region.sort((a, b) => {
         return a.localeCompare(b);
       });
 

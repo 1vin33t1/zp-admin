@@ -80,7 +80,11 @@ const ViewStaff = ({ userEmail, onLogout }) => {
       const response = await apiInstance.get(
         'https://api.gramsamruddhi.in/auth/all/region?type=applicant'
       )
-      setRegions(response.data.region || [])
+      const sortedRegions = response.data.region.sort((a, b) => {
+        return a.localeCompare(b);
+      });
+
+      setRegions(sortedRegions || [])
     } catch (err) {
       console.error('Failed to fetch regions:', err)
     }

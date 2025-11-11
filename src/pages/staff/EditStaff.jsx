@@ -42,7 +42,11 @@ const EditStaff = ({ userEmail, onLogout }) => {
         'https://api.gramsamruddhi.in/auth/all/region?type=applicant',
         { withCredentials: true }
       )
-      setRegions(response.data.region || [])
+      const sortedRegions = response.data.region.sort((a, b) => {
+        return a.localeCompare(b);
+      });
+
+      setRegions(sortedRegions || [])
     } catch (err) {
       console.error('Failed to fetch regions:', err)
       setError('Failed to fetch regions')
