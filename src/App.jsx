@@ -149,7 +149,7 @@ function App() {
 
       {/* Region Routes */}
       <Route
-        path="/region/add"
+        path="/taluka/add"
         element={
           isAuthenticated ? (
             <AddRegion userEmail={userEmail} onLogout={handleLogout} />

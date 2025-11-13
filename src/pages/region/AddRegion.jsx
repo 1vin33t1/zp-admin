@@ -13,12 +13,12 @@ const AddRegion = ({ userEmail, onLogout }) => {
 
   const validateForm = () => {
     if (!regionName.trim()) {
-      setError('Region name is required')
+      setError('Taluka name is required')
       return false
     }
 
     if (regionName.trim().length < 3) {
-      setError('Region name must be at least 3 characters long')
+      setError('Taluka name must be at least 3 characters long')
       return false
     }
 
@@ -53,10 +53,10 @@ const AddRegion = ({ userEmail, onLogout }) => {
         // Redirect to dashboard
         navigate('/dashboard')
       } else {
-        setError(response.data.failureReason || 'Failed to add region')
+        setError(response.data.failureReason || 'Failed to add Taluka')
       }
     } catch (err) {
-      setError(err.response?.data?.failureReason || 'Failed to add region')
+      setError(err.response?.data?.failureReason || 'Failed to add Taluka')
     } finally {
       setIsSubmitting(false)
     }
@@ -70,14 +70,14 @@ const AddRegion = ({ userEmail, onLogout }) => {
           ← Back to Dashboard
         </button>
 
-        <div className="page-heading">Add Region</div>
+        <div className="page-heading">Add Taluka</div>
 
         {error && <div className="error-message">{error}</div>}
 
         <div className="add-form-container">
           <div className="form-section">
             <div className="form-group">
-              <label className="form-label">Region Name *</label>
+              <label className="form-label">Taluka Name *</label>
               <input
                 type="text"
                 value={regionName}
@@ -86,7 +86,7 @@ const AddRegion = ({ userEmail, onLogout }) => {
                   setError('')
                 }}
                 className="form-input"
-                placeholder="Enter region name (minimum 3 characters)"
+                placeholder="Enter Taluka Name (minimum 3 characters)"
                 disabled={isSubmitting}
               />
               <div className="form-hint">
@@ -108,7 +108,7 @@ const AddRegion = ({ userEmail, onLogout }) => {
               className="btn-add"
               disabled={isSubmitting}
             >
-              {isSubmitting ? 'Adding...' : 'Add Region'}
+              {isSubmitting ? 'Adding...' : 'Add Taluka'}
             </button>
           </div>
         </div>
@@ -118,9 +118,9 @@ const AddRegion = ({ userEmail, onLogout }) => {
       {showConfirmModal && (
         <div className="modal-overlay">
           <div className="modal-content">
-            <div className="modal-header">Confirm Add Region</div>
+            <div className="modal-header">Confirm Add Taluka</div>
             <div className="modal-body">
-              <p>You are about to add region:</p>
+              <p>You are about to add taluka:</p>
               <div className="modal-details">
                 <p className="region-name-display">{regionName}</p>
               </div>

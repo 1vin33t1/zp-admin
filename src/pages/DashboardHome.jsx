@@ -22,10 +22,10 @@ const DashboardHome = ({ userEmail, onLogout }) => {
     },
     {
       id: 3,
-      title: 'Add Region',
-      description: 'Add new region',
+      title: 'Add Taluka',
+      description: 'Add new taluka',
       icon: '🌍',
-      path: '/region/add',
+      path: '/taluka/add',
     },
     {
       id: 4,

@@ -39,7 +39,7 @@ const ViewStaff = ({userEmail, onLogout}) => {
         }
 
         if (selectedRegion) {
-            result = result.filter((s) => s.region.includes(selectedRegion))
+            result = result.filter((s) => s.designatedTaluka.includes(selectedRegion) || s.postedTaluka === selectedRegion)
         }
 
         if (sortBy === 'name-asc') {
