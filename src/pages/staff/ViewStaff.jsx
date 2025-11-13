@@ -224,7 +224,7 @@ const ViewStaff = ({userEmail, onLogout}) => {
                                     <td>{staffMember.name}</td>
                                     <td>{staffMember.email}</td>
                                     <td>{staffMember.mobile ? staffMember.mobile : "-"}</td>
-                                    <td>{staffMember.postedTaluka ? staffMember.postedTaluka.join(', ') : '-'}</td>
+                                    <td>{staffMember.postedTaluka ? staffMember.postedTaluka : '-'}</td>
                                     <td>{staffMember.designatedTaluka ? staffMember.designatedTaluka.join(', ') : '-'}</td>
                                     <td className="actions-cell">
                                         <button

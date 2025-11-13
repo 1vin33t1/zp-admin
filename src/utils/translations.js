@@ -59,8 +59,13 @@ export const translations = {
     emailRequired: 'Email is required',
     validEmailRequired: 'Please enter a valid email address',
     nameRequired: 'Name is required',
-    selectAtLeastOneRegion: 'Please select at least one region',
-    regions: 'Regions',
+    postedRegionRequired: 'Please select posted taluka of the staff',
+    selectAtLeastOneRegion: 'Please select at least one assigned taluka',
+    regions: 'Assigned Taluka',
+    postedRegion: 'Posted Taluka',
+    postedRegionPlaceHolder: 'Select Posted Taluka',
+    postedRegionHint: 'Select the taluka where the staff is posted',
+    assignedRegions: 'Assigned Taluka',
     addStaffButton: 'Add Staff',
     adding: 'Adding...',
     confirmAddStaff: 'Confirm Add Staff',
@@ -68,6 +73,7 @@ export const translations = {
     yesAdd: 'Yes, Add',
     successfullyAdded: 'Successfully added',
     staffMemberAddedSuccessfully: 'Staff member has been added successfully!',
+    staffAddFailure: 'Failed to add staff member',
 
     // Edit Staff
     editStaff: 'Edit Staff',
