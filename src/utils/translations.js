@@ -33,7 +33,9 @@ export const translations = {
     sNo: 'S.No.',
     name: 'Name',
     email: 'Email',
-    region: 'Region',
+    postedTaluka: 'Posted Taluka',
+    designatedTaluka: 'Assigned Taluka',
+    phone: 'Mobile',
     actions: 'Actions',
     edit: 'Edit',
     delete: 'Delete',
@@ -42,7 +44,7 @@ export const translations = {
     of: 'of',
     previous: 'Previous',
     next: 'Next',
-    allRegions: 'All Regions',
+    allRegions: 'All Talukas',
 
     // Delete Modal
     confirmDelete: 'Confirm Delete',
@@ -148,6 +150,7 @@ export const translations = {
     name: 'नाम',
     email: 'ईमेल',
     region: 'क्षेत्र',
+    phone: 'फोन',
     actions: 'क्रियाएं',
     edit: 'संपादित करें',
     delete: 'हटाएं',
@@ -156,7 +159,7 @@ export const translations = {
     of: 'का',
     previous: 'पिछला',
     next: 'अगला',
-    allRegions: 'सभी क्षेत्र',
+    allRegions: 'सभी तालुका',
 
     // Delete Modal
     confirmDelete: 'हटाने की पुष्टि करें',
@@ -262,6 +265,7 @@ export const translations = {
     name: 'नाव',
     email: 'ई-मेल',
     region: 'प्रदेश',
+    phone: 'दूरध्वनी',
     actions: 'क्रिया',
     edit: 'संपादित करा',
     delete: 'हटवा',
@@ -270,7 +274,7 @@ export const translations = {
     of: 'चा',
     previous: 'मागचा',
     next: 'पुढचा',
-    allRegions: 'सर्व प्रदेश',
+    allRegions: 'सर्व तालुके',
 
     // Delete Modal
     confirmDelete: 'हटवण्याची पुष्टी करा',
