@@ -743,7 +743,7 @@ select.form-control {
   border-radius: var(--radius-base);
   box-shadow: var(--shadow-sm);
   padding: var(--space-32);
-  max-width: 600px;
+  max-width: 800px;
 }
 
 .form-section {
