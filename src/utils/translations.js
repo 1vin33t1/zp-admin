@@ -21,9 +21,12 @@ export const translations = {
     addNewAdmin: 'Add new admin',
     activityStream: 'Activity Stream',
     viewSystemActivityLogs: 'View system activity logs',
+    viewApplications: 'View Applications',
+    viewAndManageApplications: 'View and manage applications',
 
     // Staff Page
     staffList: 'Staff List',
+    staffListError: 'Failed to fetch staff list',
     searchByName: 'Search by name...',
     sortBy: 'Sort By',
     nameAZ: 'Name (A-Z)',
@@ -39,6 +42,7 @@ export const translations = {
     actions: 'Actions',
     edit: 'Edit',
     delete: 'Delete',
+    assign: 'Assign',
     noStaffFound: 'No staff members found',
     page: 'Page',
     of: 'of',
@@ -116,10 +120,34 @@ export const translations = {
     // Session
     sessionTimeout: 'Session timeout:',
     you: 'You',
+    back: 'Back',
 
     // Activity
     activity: 'Activity Stream',
     systemActivityLogs: 'System activity logs and monitoring will be displayed here.',
+
+    // Applications
+    applicationsFetchFailed: 'Failed to fetch applications',
+    noApplicationsFound: 'No applications found',
+    applicationsEmptyDescription: 'Applications will appear here once they are available.',
+    bannerUnavailable: 'Banner unavailable',
+    applicationLabel: 'Application',
+    auditorAssignmentOpen: 'Auditor assignment open',
+    auditorAssignmentLocked: 'Auditor assignment locked',
+    taluka: 'Taluka',
+    gramPanchayat: 'Gram Panchayat',
+    village: 'Village',
+    date: 'Date',
+    assignedAuditors: 'Assigned Auditors',
+    assignAuditor: 'Assign Auditor',
+    viewDetails: 'View Details',
+    selectAtLeastOneAuditor: 'Please select at least one auditor',
+    assignAuditorFailure: 'Failed to assign auditor',
+    assignAuditorSuccess: 'Auditors assigned successfully!',
+    assigning: 'Assigning...',
+    applicationId: 'Application ID',
+    select: 'Select',
+    selected: 'Selected',
   },
   hi: {
     // Common
@@ -143,9 +171,12 @@ export const translations = {
     addNewAdmin: 'नया एडमिन जोड़ें',
     activityStream: 'गतिविधि स्ट्रीम',
     viewSystemActivityLogs: 'सिस्टम गतिविधि लॉग देखें',
+    viewApplications: 'आवेदन देखें',
+    viewAndManageApplications: 'आवेदन देखें और प्रबंधित करें',
 
     // Staff Page
     staffList: 'स्टाफ सूची',
+    staffListError: 'स्टाफ सूची प्राप्त नहीं हो सकी',
     searchByName: 'नाम से खोजें...',
     sortBy: 'इसके द्वारा क्रमबद्ध करें',
     nameAZ: 'नाम (A-Z)',
@@ -160,6 +191,7 @@ export const translations = {
     actions: 'क्रियाएं',
     edit: 'संपादित करें',
     delete: 'हटाएं',
+    assign: 'असाइन करें',
     noStaffFound: 'कोई स्टाफ नहीं मिला',
     page: 'पृष्ठ',
     of: 'का',
@@ -231,10 +263,34 @@ export const translations = {
     // Session
     sessionTimeout: 'सत्र समाप्ति:',
     you: 'आप',
+    back: 'वापस',
 
     // Activity
     activity: 'गतिविधि स्ट्रीम',
     systemActivityLogs: 'सिस्टम गतिविधि लॉग और निगरानी यहां प्रदर्शित की जाएगी।',
+
+    // Applications
+    applicationsFetchFailed: 'आवेदन प्राप्त नहीं हो सके',
+    noApplicationsFound: 'कोई आवेदन नहीं मिला',
+    applicationsEmptyDescription: 'उपलब्ध होने पर आवेदन यहां दिखाई देंगे।',
+    bannerUnavailable: 'बैनर उपलब्ध नहीं है',
+    applicationLabel: 'आवेदन',
+    auditorAssignmentOpen: 'ऑडिटर असाइनमेंट खुला है',
+    auditorAssignmentLocked: 'ऑडिटर असाइनमेंट बंद है',
+    taluka: 'तालुका',
+    gramPanchayat: 'ग्राम पंचायत',
+    village: 'गांव',
+    date: 'दिनांक',
+    assignedAuditors: 'असाइन किए गए ऑडिटर',
+    assignAuditor: 'ऑडिटर असाइन करें',
+    viewDetails: 'विवरण देखें',
+    selectAtLeastOneAuditor: 'कृपया कम से कम एक ऑडिटर चुनें',
+    assignAuditorFailure: 'ऑडिटर असाइन नहीं हो सका',
+    assignAuditorSuccess: 'ऑडिटर सफलतापूर्वक असाइन किए गए!',
+    assigning: 'असाइन किया जा रहा है...',
+    applicationId: 'आवेदन आईडी',
+    select: 'चुनें',
+    selected: 'चयनित',
   },
   mr: {
     // Common
@@ -258,9 +314,12 @@ export const translations = {
     addNewAdmin: 'नवीन प्रशासक जोडा',
     activityStream: 'क्रियाकलाप प्रवाह',
     viewSystemActivityLogs: 'सिस्टम क्रियाकलाप लॉग पाहा',
+    viewApplications: 'अर्ज पहा',
+    viewAndManageApplications: 'अर्ज पहा आणि व्यवस्थापित करा',
 
     // Staff Page
     staffList: 'कर्मचारी यादी',
+    staffListError: 'कर्मचारी यादी मिळवता आली नाही',
     searchByName: 'नावाने शोधा...',
     sortBy: 'यानुसार क्रमवारित करा',
     nameAZ: 'नाव (A-Z)',
@@ -275,6 +334,7 @@ export const translations = {
     actions: 'क्रिया',
     edit: 'संपादित करा',
     delete: 'हटवा',
+    assign: 'असाइन करा',
     noStaffFound: 'कोण कर्मचारी सापडले नाही',
     page: 'पृष्ठ',
     of: 'चा',
@@ -346,10 +406,34 @@ export const translations = {
     // Session
     sessionTimeout: 'सत्र कालबाह्य:',
     you: 'आप',
+    back: 'मागे',
 
     // Activity
     activity: 'क्रियाकलाप प्रवाह',
     systemActivityLogs: 'सिस्टम क्रियाकलाप लॉग आणि निरीक्षण येथे प्रदर्शित केले जाईल।',
+
+    // Applications
+    applicationsFetchFailed: 'अर्ज मिळवता आले नाहीत',
+    noApplicationsFound: 'कोणतेही अर्ज सापडले नाहीत',
+    applicationsEmptyDescription: 'अर्ज उपलब्ध झाल्यावर येथे दिसतील.',
+    bannerUnavailable: 'बॅनर उपलब्ध नाही',
+    applicationLabel: 'अर्ज',
+    auditorAssignmentOpen: 'ऑडिटर असाइनमेंट खुले आहे',
+    auditorAssignmentLocked: 'ऑडिटर असाइनमेंट बंद आहे',
+    taluka: 'तालुका',
+    gramPanchayat: 'ग्राम पंचायत',
+    village: 'गाव',
+    date: 'दिनांक',
+    assignedAuditors: 'नियुक्त ऑडिटर',
+    assignAuditor: 'ऑडिटर असाइन करा',
+    viewDetails: 'तपशील पहा',
+    selectAtLeastOneAuditor: 'कृपया किमान एक ऑडिटर निवडा',
+    assignAuditorFailure: 'ऑडिटर असाइन करता आला नाही',
+    assignAuditorSuccess: 'ऑडिटर यशस्वीरित्या असाइन केले गेले!',
+    assigning: 'असाइन केले जात आहे...',
+    applicationId: 'अर्ज आयडी',
+    select: 'निवडा',
+    selected: 'निवडलेले',
   },
 }
 

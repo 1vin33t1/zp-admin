@@ -1,4 +1,4 @@
-import { Link, useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import './DashboardHome.css'
 import TopBar from '../components/TopBar'
 
@@ -22,13 +22,20 @@ const DashboardHome = ({ userEmail, onLogout }) => {
     },
     {
       id: 3,
+      title: 'View Applications',
+      description: 'View and manage applications',
+      icon: '🗂️',
+      path: '/staff/applications',
+    },
+    {
+      id: 4,
       title: 'View Admins',
       description: 'View all admins',
       icon: '🔐',
       path: '/admin/view',
     },
     {
-      id: 4,
+      id: 5,
       title: 'Add Admin',
       description: 'Add new admin',
       icon: '👤',

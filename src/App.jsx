@@ -11,6 +11,8 @@ import ViewAdmin from './pages/admin/ViewAdmin'
 import AddAdmin from './pages/admin/AddAdmin'
 import EditAdmin from './pages/admin/EditAdmin'
 import ActivityStream from './pages/ActivityStream'
+import StaffApplications from './pages/staff/StaffApplications'
+import AssignAuditor from './pages/staff/AssignAuditor'
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(null)
@@ -108,6 +110,26 @@ function App() {
         element={
           isAuthenticated ? (
             <EditStaff userEmail={userEmail} onLogout={handleLogout} />
+          ) : (
+            <Navigate to="/" replace />
+          )
+        }
+      />
+      <Route
+        path="/staff/applications"
+        element={
+          isAuthenticated ? (
+            <StaffApplications userEmail={userEmail} onLogout={handleLogout} />
+          ) : (
+            <Navigate to="/" replace />
+          )
+        }
+      />
+      <Route
+        path="/staff/application/:applicationId/assign-auditor"
+        element={
+          isAuthenticated ? (
+            <AssignAuditor userEmail={userEmail} onLogout={handleLogout} />
           ) : (
             <Navigate to="/" replace />
           )
