@@ -1,99 +1,139 @@
-import { useNavigate } from 'react-router-dom'
+import {useNavigate} from 'react-router-dom'
 import './TopBar.css'
-import { useState, useEffect } from 'react'
-import { useLanguage } from '../context/LanguageContext'
-import { t } from '../utils/translations'
+import {useEffect, useState} from 'react'
+import {useLanguage} from '../context/LanguageContext'
+import {t} from '../utils/translations'
 
-const TopBar = ({ userEmail, onLogout, isLoggedIn }) => {
-  const [remainingTime, setRemainingTime] = useState('15:00')
-  const navigate = useNavigate()
-  const { language, setLanguage } = useLanguage()
+const TopBar = ({userEmail, onLogout, isLoggedIn}) => {
+    const [remainingTime, setRemainingTime] = useState('15:00')
 
-  useEffect(() => {
-    if (!isLoggedIn) return
+    const navigate = useNavigate()
+    const {language, setLanguage} = useLanguage()
 
-    const INACTIVITY_TIMEOUT = 15 * 60
-    let timeRemaining = INACTIVITY_TIMEOUT
+    useEffect(() => {
+        if (!isLoggedIn) return;
 
-    const interval = setInterval(() => {
-      timeRemaining--
+        const interval = setInterval(() => {
+            const lastActivityString = localStorage.getItem('adminLastActivity');
 
-      if (timeRemaining <= 0) {
-        clearInterval(interval)
-        setRemainingTime('0:00')
-        return
-      }
+            if (!lastActivityString) {
+                clearInterval(interval);
+                setRemainingTime('0:00');
+                handleLogout();
+                return;
+            }
 
-      const minutes = Math.floor(timeRemaining / 60)
-      const seconds = timeRemaining % 60
-      setRemainingTime(`${minutes}:${seconds.toString().padStart(2, '0')}`)
-    }, 1000)
+            const lastActivity = new Date(lastActivityString);
+            const diffMs = Date.now() - lastActivity.getTime();
+            const totalSessionSeconds = 15 * 60;
+            const remainingSeconds = totalSessionSeconds - Math.floor(diffMs / 1000);
 
-    return () => clearInterval(interval)
-  }, [isLoggedIn])
+            if (remainingSeconds <= 0) {
+                clearInterval(interval);
+                setRemainingTime('0:00');
+                handleLogout();
+                return;
+            }
 
-  const handleLogout = async () => {
-    await onLogout()
-  }
+            const minutes = Math.floor(remainingSeconds / 60);
+            const seconds = remainingSeconds % 60;
+            setRemainingTime(`${minutes}:${seconds.toString().padStart(2, '0')}`);
+        }, 1000);
 
-  const handleBrandClick = () => {
-    navigate('/dashboard')
-  }
+        // start listening for user activity
+        const stopMonitoring = startActivityMonitoring();
 
-  return (
-    <div className="top-bar">
-      <div className="top-bar-left">
-        <div
-          className="top-bar-brand"
-          onClick={handleBrandClick}
-          style={{ cursor: 'pointer' }}
-        >
-          ग्राम समृद्धि
+        return () => {
+            clearInterval(interval);
+            // remove event listeners on unmount / logout
+            if (typeof stopMonitoring === 'function') {
+                stopMonitoring();
+            }
+        };
+    }, [isLoggedIn]);
+
+    const handleLogout = async () => {
+        await onLogout()
+    }
+
+    const resetActivityTimer = () => {
+        localStorage.setItem('adminLastActivity', new Date().toISOString());
+    }
+
+    const startActivityMonitoring = () => {
+        const events = ['mousedown', 'keydown', 'scroll', 'touchstart', 'click']
+
+        events.forEach(event => {
+            document.addEventListener(event, resetActivityTimer)
+        })
+
+        resetActivityTimer()
+
+        return () => {
+            events.forEach(event => {
+                document.removeEventListener(event, resetActivityTimer)
+            })
+        }
+    }
+
+    const handleBrandClick = () => {
+        navigate('/dashboard')
+    }
+
+    return (
+        <div className="top-bar">
+            <div className="top-bar-left">
+                <div
+                    className="top-bar-brand"
+                    onClick={handleBrandClick}
+                    style={{cursor: 'pointer'}}
+                >
+                    ग्राम समृद्धि, चंद्रपूर
+                </div>
+                {isLoggedIn && (
+                    <button
+                        onClick={handleBrandClick}
+                        className="dashboard-nav-link"
+                        style={{
+                            background: 'none',
+                            border: 'none',
+                            color: 'white',
+                            cursor: 'pointer',
+                        }}
+                    >
+                        {t('dashboard', language)}
+                    </button>
+                )}
+            </div>
+
+            {isLoggedIn && (
+                <div className="top-bar-right">
+                    <div className="language-selector">
+                        <select
+                            value={language}
+                            onChange={(e) => setLanguage(e.target.value)}
+                            className="language-dropdown"
+                            title="Select Language"
+                        >
+                            <option value="en">English</option>
+                            <option value="hi">हिंदी</option>
+                            <option value="mr">मराठी</option>
+                        </select>
+                    </div>
+
+                    <div className="activity-timer">
+                        {t('sessionTimeout', language)} {remainingTime}
+                    </div>
+                    <div className="user-info">
+                        <div className="user-email">{userEmail}</div>
+                        <button className="logout-btn" onClick={handleLogout}>
+                            {t('logout', language)}
+                        </button>
+                    </div>
+                </div>
+            )}
         </div>
-        {isLoggedIn && (
-          <button
-            onClick={handleBrandClick}
-            className="dashboard-nav-link"
-            style={{
-              background: 'none',
-              border: 'none',
-              color: 'white',
-              cursor: 'pointer',
-            }}
-          >
-            {t('dashboard', language)}
-          </button>
-        )}
-      </div>
-
-      {isLoggedIn && (
-        <div className="top-bar-right">
-          <div className="language-selector">
-            <select
-              value={language}
-              onChange={(e) => setLanguage(e.target.value)}
-              className="language-dropdown"
-              title="Select Language"
-            >
-              <option value="en">English</option>
-              <option value="hi">हिंदी</option>
-              <option value="mr">मराठी</option>
-            </select>
-          </div>
-
-          <div className="activity-timer">
-            {t('sessionTimeout', language)} {remainingTime}
-          </div>
-          <div className="user-info">
-            <div className="user-email">{userEmail}</div>
-            <button className="logout-btn" onClick={handleLogout}>
-              {t('logout', language)}
-            </button>
-          </div>
-        </div>
-      )}
-    </div>
-  )
+    )
 }
 
 export default TopBar

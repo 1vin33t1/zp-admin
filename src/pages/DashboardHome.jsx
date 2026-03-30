@@ -22,32 +22,18 @@ const DashboardHome = ({ userEmail, onLogout }) => {
     },
     {
       id: 3,
-      title: 'Add Taluka',
-      description: 'Add new taluka',
-      icon: '🌍',
-      path: '/taluka/add',
-    },
-    {
-      id: 4,
       title: 'View Admins',
       description: 'View all admins',
       icon: '🔐',
       path: '/admin/view',
     },
     {
-      id: 5,
+      id: 4,
       title: 'Add Admin',
       description: 'Add new admin',
       icon: '👤',
       path: '/admin/add',
     },
-    // {
-    //   id: 6,
-    //   title: 'Activity Stream',
-    //   description: 'View system activity logs',
-    //   icon: '📊',
-    //   path: '/activity',
-    // },
   ]
 
   return (

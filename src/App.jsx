@@ -10,7 +10,6 @@ import EditStaff from './pages/staff/EditStaff'
 import ViewAdmin from './pages/admin/ViewAdmin'
 import AddAdmin from './pages/admin/AddAdmin'
 import EditAdmin from './pages/admin/EditAdmin'
-import AddRegion from './pages/region/AddRegion'
 import ActivityStream from './pages/ActivityStream'
 
 function App() {
@@ -29,7 +28,7 @@ function App() {
       })
       if (response.data.status === true) {
         setIsAuthenticated(true)
-        setUserEmail(response.data.email || null)
+        setUserEmail(response.data.email || null);
       } else {
         setIsAuthenticated(false)
       }
@@ -53,7 +52,7 @@ function App() {
     }
   }
 
-  if (loading) {
+    if (loading) {
     return <div className="loading">Loading...</div>
   }
 
@@ -141,18 +140,6 @@ function App() {
         element={
           isAuthenticated ? (
             <EditAdmin userEmail={userEmail} onLogout={handleLogout} />
-          ) : (
-            <Navigate to="/" replace />
-          )
-        }
-      />
-
-      {/* Region Routes */}
-      <Route
-        path="/taluka/add"
-        element={
-          isAuthenticated ? (
-            <AddRegion userEmail={userEmail} onLogout={handleLogout} />
           ) : (
             <Navigate to="/" replace />
           )

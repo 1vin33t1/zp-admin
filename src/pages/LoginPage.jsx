@@ -102,6 +102,7 @@ const LoginPage = ({ onLoginSuccess }) => {
             )
 
             if (response.data.verified) {
+                localStorage.setItem('adminLastActivity', new Date().toISOString());
                 onLoginSuccess()
                 navigate('/zp-admin/dashboard')
             } else {
