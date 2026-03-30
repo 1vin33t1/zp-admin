@@ -4,6 +4,7 @@ import './StaffApplications.css'
 import TopBar from '../../components/TopBar'
 import { useLanguage } from '../../context/LanguageContext'
 import { t } from '../../utils/translations'
+import { getApiUrl, ROUTES } from '../../config/appConfig'
 import {
   getZpAdminAccessToken,
   initializeZpAdminJwtFlow,
@@ -38,7 +39,7 @@ const formatDateInIst = (value, language) => {
 
 const StaffApplications = ({ userEmail, onLogout }) => {
   const navigate = useNavigate()
-  const { language } = useLanguage()
+  const { language, getLanguageCode } = useLanguage()
   const [applications, setApplications] = useState([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
@@ -53,10 +54,10 @@ const StaffApplications = ({ userEmail, onLogout }) => {
       try {
         await initializeZpAdminJwtFlow()
         const accessToken = await getZpAdminAccessToken()
-        const response = await fetch('https://api.gramsamruddhi.in/zp-application/all', {
+        const response = await fetch(getApiUrl('/zp-application/all'), {
           headers: {
             Accept: 'application/json',
-            'Accept-Language': language,
+            'Accept-Language': getLanguageCode(),
             Authorization: `Bearer ${accessToken}`,
           }
         })
@@ -116,7 +117,7 @@ const StaffApplications = ({ userEmail, onLogout }) => {
     <div className="page-container">
       <TopBar userEmail={userEmail} onLogout={onLogout} isLoggedIn={true} />
       <div className="page-content">
-        <button onClick={() => navigate('/dashboard')} className="back-button">
+        <button onClick={() => navigate(ROUTES.dashboard)} className="back-button">
           ← {t('backToDashboard', language)}
         </button>
 
@@ -204,7 +205,7 @@ const StaffApplications = ({ userEmail, onLogout }) => {
                     <button
                       className="application-btn application-btn-primary"
                       onClick={() =>
-                        navigate(`/staff/application/${application.id}/assign-auditor`, {
+                        navigate(ROUTES.assignAuditor(application.id), {
                           state: { application },
                         })
                       }

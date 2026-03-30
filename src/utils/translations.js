@@ -93,7 +93,11 @@ export const translations = {
 
     // Admin Pages
     adminList: 'Admin List',
+    adminListError: 'Failed to fetch admin list',
     adminCannotDelete: 'Cannot delete your own account',
+    adminDeleteFailure: 'Failed to delete admin',
+    adminAddFailure: 'Failed to add admin',
+    adminUpdateFailure: 'Failed to update admin',
     noAdminsFound: 'No admins found',
     confirmAddAdmin: 'Confirm Add Admin',
     areYouSureAddAdmin: 'Are you sure you want to add this admin?',
@@ -104,6 +108,11 @@ export const translations = {
     areYouSureUpdateAdmin: 'Are you sure you want to update this admin?',
     yesUpdateAdmin: 'Yes, Update',
     adminUpdatedSuccessfully: 'Admin has been updated successfully!',
+    enterAdminEmail: 'Enter admin email',
+    enterAdminName: 'Enter admin name',
+    noAdminDataProvided: 'No admin data provided',
+    nameCannotBeEmpty: 'Name cannot be empty',
+    goBackToAdminList: 'Go Back to Admin List',
 
     // Region
     regionName: 'Region Name',
@@ -186,6 +195,8 @@ export const translations = {
     sNo: 'क्र.सं.',
     name: 'नाम',
     email: 'ईमेल',
+    postedTaluka: 'पोस्टेड तालुका',
+    designatedTaluka: 'असाइन तालुका',
     region: 'क्षेत्र',
     phone: 'फोन',
     actions: 'क्रियाएं',
@@ -236,7 +247,11 @@ export const translations = {
 
     // Admin Pages
     adminList: 'एडमिन सूची',
+    adminListError: 'एडमिन सूची प्राप्त नहीं हो सकी',
     adminCannotDelete: 'अपने खुद के खाते को हटा नहीं सकते',
+    adminDeleteFailure: 'एडमिन हटाया नहीं जा सका',
+    adminAddFailure: 'एडमिन जोड़ा नहीं जा सका',
+    adminUpdateFailure: 'एडमिन अपडेट नहीं हो सका',
     noAdminsFound: 'कोई एडमिन नहीं मिले',
     confirmAddAdmin: 'एडमिन जोड़ने की पुष्टि करें',
     areYouSureAddAdmin: 'क्या आप वाकई इस एडमिन को जोड़ना चाहते हैं?',
@@ -247,6 +262,11 @@ export const translations = {
     areYouSureUpdateAdmin: 'क्या आप वाकई इस एडमिन को अपडेट करना चाहते हैं?',
     yesUpdateAdmin: 'हां, अपडेट करें',
     adminUpdatedSuccessfully: 'एडमिन सफलतापूर्वक अपडेट किया गया!',
+    enterAdminEmail: 'एडमिन ईमेल दर्ज करें',
+    enterAdminName: 'एडमिन नाम दर्ज करें',
+    noAdminDataProvided: 'कोई एडमिन डेटा उपलब्ध नहीं है',
+    nameCannotBeEmpty: 'नाम खाली नहीं हो सकता',
+    goBackToAdminList: 'एडमिन सूची पर वापस जाएं',
 
     // Region
     regionName: 'क्षेत्र का नाम',
@@ -329,6 +349,8 @@ export const translations = {
     sNo: 'क्र.क्रं.',
     name: 'नाव',
     email: 'ई-मेल',
+    postedTaluka: 'पोस्टेड तालुका',
+    designatedTaluka: 'असाइन तालुका',
     region: 'प्रदेश',
     phone: 'दूरध्वनी',
     actions: 'क्रिया',
@@ -379,7 +401,11 @@ export const translations = {
 
     // Admin Pages
     adminList: 'प्रशासक यादी',
+    adminListError: 'प्रशासक यादी मिळवता आली नाही',
     adminCannotDelete: 'आपल्या स्वतःच्या खात्याला हटवू शकत नाही',
+    adminDeleteFailure: 'प्रशासक हटवता आला नाही',
+    adminAddFailure: 'प्रशासक जोडता आला नाही',
+    adminUpdateFailure: 'प्रशासक अद्यतनित करता आला नाही',
     noAdminsFound: 'कोण प्रशासक सापडले नाही',
     confirmAddAdmin: 'प्रशासक जोडण्याची पुष्टी करा',
     areYouSureAddAdmin: 'तुम्हाला खरोखर हा प्रशासक जोडायचा आहे का?',
@@ -390,6 +416,11 @@ export const translations = {
     areYouSureUpdateAdmin: 'तुम्हाला खरोखर हा प्रशासक अद्यतन करायचा आहे का?',
     yesUpdateAdmin: 'होय, अद्यतन करा',
     adminUpdatedSuccessfully: 'प्रशासक यशस्वीरित्या अद्यतन केला गेला!',
+    enterAdminEmail: 'प्रशासक ई-मेल प्रविष्ट करा',
+    enterAdminName: 'प्रशासक नाव प्रविष्ट करा',
+    noAdminDataProvided: 'प्रशासक डेटा उपलब्ध नाही',
+    nameCannotBeEmpty: 'नाव रिकामे असू शकत नाही',
+    goBackToAdminList: 'प्रशासक यादीकडे परत जा',
 
     // Region
     regionName: 'प्रदेशाचे नाव',

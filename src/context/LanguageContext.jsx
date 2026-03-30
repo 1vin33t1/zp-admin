@@ -1,4 +1,5 @@
 import { createContext, useState, useContext, useEffect } from 'react'
+import { getLanguageCode as resolveLanguageCode } from '../utils/apiUtils'
 
 const LanguageContext = createContext()
 
@@ -12,14 +13,7 @@ export const LanguageProvider = ({ children }) => {
     localStorage.setItem('language', language)
   }, [language])
 
-  const getLanguageCode = () => {
-    const codes = {
-      en: 'en-US',
-      hi: 'hi-IN',
-      mr: 'mr-IN',
-    }
-    return codes[language] || 'en-US'
-  }
+  const getLanguageCode = () => resolveLanguageCode(language)
 
   return (
     <LanguageContext.Provider value={{ language, setLanguage, getLanguageCode }}>

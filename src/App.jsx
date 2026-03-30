@@ -2,6 +2,7 @@ import { Routes, Route, Navigate } from 'react-router-dom'
 import { useState, useEffect } from 'react'
 import axios from 'axios'
 import './App.css'
+import ProtectedRoute from './components/ProtectedRoute'
 import LoginPage from './pages/LoginPage'
 import DashboardHome from './pages/DashboardHome'
 import ViewStaff from './pages/staff/ViewStaff'
@@ -13,6 +14,9 @@ import EditAdmin from './pages/admin/EditAdmin'
 import ActivityStream from './pages/ActivityStream'
 import StaffApplications from './pages/staff/StaffApplications'
 import AssignAuditor from './pages/staff/AssignAuditor'
+import AddRegion from './pages/region/AddRegion'
+import { getApiUrl, ROUTES } from './config/appConfig'
+import { stopZpAdminJwtScheduler } from './utils/zpAdminJwt'
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(null)
@@ -25,17 +29,19 @@ function App() {
 
   const checkAuthStatus = async () => {
     try {
-      const response = await axios.get('https://api.gramsamruddhi.in/auth/status/admin', {
+      const response = await axios.get(getApiUrl('/auth/status/admin'), {
         withCredentials: true,
       })
       if (response.data.status === true) {
         setIsAuthenticated(true)
-        setUserEmail(response.data.email || null);
+        setUserEmail(response.data.email || null)
       } else {
         setIsAuthenticated(false)
+        setUserEmail(null)
       }
     } catch (error) {
       setIsAuthenticated(false)
+      setUserEmail(null)
     } finally {
       setLoading(false)
     }
@@ -43,145 +49,89 @@ function App() {
 
   const handleLogout = async () => {
     try {
-      await axios.post('https://api.gramsamruddhi.in/auth/logout/zp-admin', {}, {
+      await axios.post(getApiUrl('/auth/logout/zp-admin'), {}, {
         withCredentials: true,
       })
     } catch (error) {
       console.log('Logout error:', error)
     } finally {
+      stopZpAdminJwtScheduler()
       setIsAuthenticated(false)
       setUserEmail(null)
     }
   }
 
-    if (loading) {
+  if (loading) {
     return <div className="loading">Loading...</div>
   }
 
+  const protectedRouteElements = [
+    {
+      path: ROUTES.dashboard,
+      element: <DashboardHome userEmail={userEmail} onLogout={handleLogout} />,
+    },
+    {
+      path: ROUTES.staffView,
+      element: <ViewStaff userEmail={userEmail} onLogout={handleLogout} />,
+    },
+    {
+      path: ROUTES.staffAdd,
+      element: <AddStaff userEmail={userEmail} onLogout={handleLogout} />,
+    },
+    {
+      path: ROUTES.staffEdit,
+      element: <EditStaff userEmail={userEmail} onLogout={handleLogout} />,
+    },
+    {
+      path: ROUTES.staffApplications,
+      element: <StaffApplications userEmail={userEmail} onLogout={handleLogout} />,
+    },
+    {
+      path: ROUTES.assignAuditor(),
+      element: <AssignAuditor userEmail={userEmail} onLogout={handleLogout} />,
+    },
+    {
+      path: ROUTES.adminView,
+      element: <ViewAdmin userEmail={userEmail} onLogout={handleLogout} />,
+    },
+    {
+      path: ROUTES.adminAdd,
+      element: <AddAdmin userEmail={userEmail} onLogout={handleLogout} />,
+    },
+    {
+      path: ROUTES.adminEdit,
+      element: <EditAdmin userEmail={userEmail} onLogout={handleLogout} />,
+    },
+    {
+      path: ROUTES.regionAdd,
+      element: <AddRegion userEmail={userEmail} onLogout={handleLogout} />,
+    },
+    {
+      path: ROUTES.activity,
+      element: <ActivityStream userEmail={userEmail} onLogout={handleLogout} />,
+    },
+  ]
+
   return (
     <Routes>
-      {/* Login Route */}
-      <Route 
-        path="/" 
-        element={
-          isAuthenticated ? (
-            <Navigate to="/dashboard" replace />
-          ) : (
-            <LoginPage onLoginSuccess={() => checkAuthStatus()} />
-          )
-        } 
-      />
-
-      {/* Dashboard Route */}
       <Route
-        path="/dashboard"
+        path={ROUTES.login}
         element={
           isAuthenticated ? (
-            <DashboardHome userEmail={userEmail} onLogout={handleLogout} />
+            <Navigate to={ROUTES.dashboard} replace />
           ) : (
-            <Navigate to="/" replace />
+            <LoginPage onLoginSuccess={checkAuthStatus} />
           )
         }
       />
 
-      {/* Staff Routes */}
-      <Route
-        path="/staff/view"
-        element={
-          isAuthenticated ? (
-            <ViewStaff userEmail={userEmail} onLogout={handleLogout} />
-          ) : (
-            <Navigate to="/" replace />
-          )
-        }
-      />
-      <Route
-        path="/staff/add"
-        element={
-          isAuthenticated ? (
-            <AddStaff userEmail={userEmail} onLogout={handleLogout} />
-          ) : (
-            <Navigate to="/" replace />
-          )
-        }
-      />
-      <Route
-        path="/staff/edit"
-        element={
-          isAuthenticated ? (
-            <EditStaff userEmail={userEmail} onLogout={handleLogout} />
-          ) : (
-            <Navigate to="/" replace />
-          )
-        }
-      />
-      <Route
-        path="/staff/applications"
-        element={
-          isAuthenticated ? (
-            <StaffApplications userEmail={userEmail} onLogout={handleLogout} />
-          ) : (
-            <Navigate to="/" replace />
-          )
-        }
-      />
-      <Route
-        path="/staff/application/:applicationId/assign-auditor"
-        element={
-          isAuthenticated ? (
-            <AssignAuditor userEmail={userEmail} onLogout={handleLogout} />
-          ) : (
-            <Navigate to="/" replace />
-          )
-        }
-      />
+      <Route element={<ProtectedRoute isAuthenticated={isAuthenticated} />}>
+        {protectedRouteElements.map((route) => (
+          <Route key={route.path} path={route.path} element={route.element} />
+        ))}
+      </Route>
 
-      {/* Admin Routes */}
-      <Route
-        path="/admin/view"
-        element={
-          isAuthenticated ? (
-            <ViewAdmin userEmail={userEmail} onLogout={handleLogout} />
-          ) : (
-            <Navigate to="/" replace />
-          )
-        }
-      />
-      <Route
-        path="/admin/add"
-        element={
-          isAuthenticated ? (
-            <AddAdmin userEmail={userEmail} onLogout={handleLogout} />
-          ) : (
-            <Navigate to="/" replace />
-          )
-        }
-      />
-      <Route
-        path="/admin/edit"
-        element={
-          isAuthenticated ? (
-            <EditAdmin userEmail={userEmail} onLogout={handleLogout} />
-          ) : (
-            <Navigate to="/" replace />
-          )
-        }
-      />
-
-      {/* Activity Route */}
-      <Route
-        path="/activity"
-        element={
-          isAuthenticated ? (
-            <ActivityStream userEmail={userEmail} onLogout={handleLogout} />
-          ) : (
-            <Navigate to="/" replace />
-          )
-        }
-      />
-
-      {/* Catch all - redirect to home */}
-      <Route path="*" element={<Navigate to="/" replace />} />
+      <Route path="*" element={<Navigate to={ROUTES.login} replace />} />
     </Routes>
   )
 }

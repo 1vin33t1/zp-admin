@@ -1,45 +1,63 @@
 import { useNavigate } from 'react-router-dom'
 import './DashboardHome.css'
 import TopBar from '../components/TopBar'
+import { useLanguage } from '../context/LanguageContext'
+import { t } from '../utils/translations'
+import { ROUTES } from '../config/appConfig'
 
 const DashboardHome = ({ userEmail, onLogout }) => {
   const navigate = useNavigate()
+  const { language } = useLanguage()
 
   const menuItems = [
     {
       id: 1,
-      title: 'View Staff',
-      description: 'View all staff members',
+      title: t('viewStaff', language),
+      description: t('viewAllStaffMembers', language),
       icon: '👥',
-      path: '/staff/view',
+      path: ROUTES.staffView,
     },
     {
       id: 2,
-      title: 'Add Staff',
-      description: 'Add new staff member',
+      title: t('addStaff', language),
+      description: t('addNewStaffMember', language),
       icon: '➕',
-      path: '/staff/add',
+      path: ROUTES.staffAdd,
     },
     {
       id: 3,
-      title: 'View Applications',
-      description: 'View and manage applications',
+      title: t('viewApplications', language),
+      description: t('viewAndManageApplications', language),
       icon: '🗂️',
-      path: '/staff/applications',
+      path: ROUTES.staffApplications,
     },
     {
       id: 4,
-      title: 'View Admins',
-      description: 'View all admins',
+      title: t('viewAdmins', language),
+      description: t('viewAllAdmins', language),
       icon: '🔐',
-      path: '/admin/view',
+      path: ROUTES.adminView,
     },
     {
       id: 5,
-      title: 'Add Admin',
-      description: 'Add new admin',
+      title: t('addAdmin', language),
+      description: t('addNewAdmin', language),
       icon: '👤',
-      path: '/admin/add',
+      path: ROUTES.adminAdd,
+    },
+    {
+      id: 6,
+      title: t('addRegion', language),
+      description: t('addNewRegion', language),
+      icon: '📍',
+      path: ROUTES.regionAdd,
+    },
+    {
+      id: 7,
+      title: t('activityStream', language),
+      description: t('viewSystemActivityLogs', language),
+      icon: '📊',
+      path: ROUTES.activity,
     },
   ]
 
@@ -47,7 +65,7 @@ const DashboardHome = ({ userEmail, onLogout }) => {
     <div className="dashboard-container">
       <TopBar userEmail={userEmail} onLogout={onLogout} isLoggedIn={true} />
       <div className="dashboard-content">
-        <div className="dashboard-heading">Dashboard</div>
+        <div className="dashboard-heading">{t('dashboard', language)}</div>
         <div className="dashboard-grid">
           {menuItems.map((item) => (
             <div

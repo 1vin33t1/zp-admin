@@ -1,11 +1,15 @@
 import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
-import axios from 'axios'
 import './ViewAdmin.css'
 import TopBar from '../../components/TopBar'
+import { useLanguage } from '../../context/LanguageContext'
+import { t } from '../../utils/translations'
+import { createAxiosInstance } from '../../utils/apiUtils'
+import { ROUTES } from '../../config/appConfig'
 
 const ViewAdmin = ({ userEmail, onLogout }) => {
   const navigate = useNavigate()
+  const { language, getLanguageCode } = useLanguage()
   const [admins, setAdmins] = useState([])
   const [filteredAdmins, setFilteredAdmins] = useState([])
   const [loading, setLoading] = useState(false)
@@ -22,7 +26,7 @@ const ViewAdmin = ({ userEmail, onLogout }) => {
   // Fetch admin data
   useEffect(() => {
     fetchAdmins()
-  }, [])
+  }, [language])
 
   // Apply filters and search
   useEffect(() => {
@@ -54,13 +58,11 @@ const ViewAdmin = ({ userEmail, onLogout }) => {
     setLoading(true)
     setError('')
     try {
-      const response = await axios.get(
-        'https://api.gramsamruddhi.in/auth/all/staff?role=ZP_ADMIN',
-        { withCredentials: true }
-      )
+      const apiInstance = createAxiosInstance(getLanguageCode())
+      const response = await apiInstance.get('/auth/all/staff?role=ZP_ADMIN')
       setAdmins(response.data.staff || [])
     } catch (err) {
-      setError('Failed to fetch admin data')
+      setError(t('adminListError', language))
       console.error(err)
     } finally {
       setLoading(false)
@@ -68,7 +70,7 @@ const ViewAdmin = ({ userEmail, onLogout }) => {
   }
 
   const handleEditClick = (admin) => {
-    navigate('/admin/edit', { state: { admin } })
+    navigate(ROUTES.adminEdit, { state: { admin } })
   }
 
   const handleDeleteClick = (admin) => {
@@ -80,26 +82,26 @@ const ViewAdmin = ({ userEmail, onLogout }) => {
     if (!deleteTarget) return
 
     try {
-      const response = await axios.delete(
-        'https://api.gramsamruddhi.in/auth/staff',
+      const apiInstance = createAxiosInstance(getLanguageCode())
+      const response = await apiInstance.delete(
+        '/auth/staff',
         {
           data: {
             email: deleteTarget.email,
             role: 'ZP_ADMIN',
           },
-          withCredentials: true,
         }
       )
 
       if (response.data.success) {
         setAdmins((prev) => prev.filter((a) => a.email !== deleteTarget.email))
-        setSuccessMessage(`Successfully deleted ${deleteTarget.name}`)
+        setSuccessMessage(`${t('successfullyDeleted', language)} ${deleteTarget.name}`)
         setTimeout(() => setSuccessMessage(''), 3000)
       } else {
-        setError(response.data.failureReason || 'Failed to delete admin')
+        setError(response.data.failureReason || t('adminDeleteFailure', language))
       }
     } catch (err) {
-      setError(err.response?.data?.failureReason || 'Failed to delete admin')
+      setError(err.response?.data?.failureReason || t('adminDeleteFailure', language))
     } finally {
       setShowDeleteModal(false)
       setDeleteTarget(null)
@@ -119,7 +121,7 @@ const ViewAdmin = ({ userEmail, onLogout }) => {
       <div className="page-container">
         <TopBar userEmail={userEmail} onLogout={onLogout} isLoggedIn={true} />
         <div className="page-content">
-          <div style={{ textAlign: 'center', padding: '48px' }}>Loading...</div>
+          <div style={{ textAlign: 'center', padding: '48px' }}>{t('loading', language)}</div>
         </div>
       </div>
     )
@@ -129,11 +131,11 @@ const ViewAdmin = ({ userEmail, onLogout }) => {
     <div className="page-container">
       <TopBar userEmail={userEmail} onLogout={onLogout} isLoggedIn={true} />
       <div className="page-content">
-        <button onClick={() => navigate('/dashboard')} className="back-button">
-          ← Back to Dashboard
+        <button onClick={() => navigate(ROUTES.dashboard)} className="back-button">
+          ← {t('backToDashboard', language)}
         </button>
 
-        <div className="page-heading">View Admins</div>
+        <div className="page-heading">{t('adminList', language)}</div>
 
         {error && <div className="error-message">{error}</div>}
         {successMessage && <div className="success-message">{successMessage}</div>}
@@ -143,7 +145,7 @@ const ViewAdmin = ({ userEmail, onLogout }) => {
             <div className="search-box">
               <input
                 type="text"
-                placeholder="Search by name..."
+                placeholder={t('searchByName', language)}
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
                 className="search-input"
@@ -156,11 +158,11 @@ const ViewAdmin = ({ userEmail, onLogout }) => {
                 onChange={(e) => setSortBy(e.target.value)}
                 className="sort-select"
               >
-                <option value="">Sort By</option>
-                <option value="name-asc">Name (A-Z)</option>
-                <option value="name-desc">Name (Z-A)</option>
-                <option value="email-asc">Email (A-Z)</option>
-                <option value="email-desc">Email (Z-A)</option>
+                <option value="">{t('sortBy', language)}</option>
+                <option value="name-asc">{t('nameAZ', language)}</option>
+                <option value="name-desc">{t('nameZA', language)}</option>
+                <option value="email-asc">{t('emailAZ', language)}</option>
+                <option value="email-desc">{t('emailZA', language)}</option>
               </select>
             </div>
           </div>
@@ -170,10 +172,10 @@ const ViewAdmin = ({ userEmail, onLogout }) => {
           <table className="admin-table">
             <thead>
               <tr>
-                <th>S.No.</th>
-                <th>Name</th>
-                <th>Email</th>
-                <th>Actions</th>
+                <th>{t('sNo', language)}</th>
+                <th>{t('name', language)}</th>
+                <th>{t('email', language)}</th>
+                <th>{t('actions', language)}</th>
               </tr>
             </thead>
             <tbody>
@@ -184,7 +186,7 @@ const ViewAdmin = ({ userEmail, onLogout }) => {
                     <td>
                       {admin.name}
                       {isCurrentUser(admin.email) && (
-                        <span className="current-user-badge"> (You)</span>
+                        <span className="current-user-badge"> ({t('you', language)})</span>
                       )}
                     </td>
                     <td>{admin.email}</td>
@@ -193,15 +195,19 @@ const ViewAdmin = ({ userEmail, onLogout }) => {
                         className="btn-edit"
                         onClick={() => handleEditClick(admin)}
                       >
-                        Edit
+                        {t('edit', language)}
                       </button>
                       <button
                         className={`btn-delete ${isCurrentUser(admin.email) ? 'btn-delete-disabled' : ''}`}
                         onClick={() => handleDeleteClick(admin)}
                         disabled={isCurrentUser(admin.email)}
-                        title={isCurrentUser(admin.email) ? 'Cannot delete your own account' : 'Delete'}
+                        title={
+                          isCurrentUser(admin.email)
+                            ? t('adminCannotDelete', language)
+                            : t('delete', language)
+                        }
                       >
-                        Delete
+                        {t('delete', language)}
                       </button>
                     </td>
                   </tr>
@@ -209,7 +215,7 @@ const ViewAdmin = ({ userEmail, onLogout }) => {
               ) : (
                 <tr>
                   <td colSpan="4" className="empty-cell">
-                    No admins found
+                    {t('noAdminsFound', language)}
                   </td>
                 </tr>
               )}
@@ -224,17 +230,17 @@ const ViewAdmin = ({ userEmail, onLogout }) => {
               onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
               disabled={currentPage === 1}
             >
-              Previous
+              {t('previous', language)}
             </button>
             <span className="pagination-info">
-              Page {currentPage} of {totalPages}
+              {t('page', language)} {currentPage} {t('of', language)} {totalPages}
             </span>
             <button
               className="pagination-btn"
               onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
               disabled={currentPage === totalPages}
             >
-              Next
+              {t('next', language)}
             </button>
           </div>
         )}
@@ -243,15 +249,15 @@ const ViewAdmin = ({ userEmail, onLogout }) => {
       {showDeleteModal && (
         <div className="modal-overlay">
           <div className="modal-content">
-            <div className="modal-header">Confirm Delete</div>
+            <div className="modal-header">{t('confirmDelete', language)}</div>
             <div className="modal-body">
-              <p>Are you sure you want to delete this admin?</p>
+              <p>{t('areYouSureDeleteAdmin', language)}</p>
               <div className="modal-details">
                 <p>
-                  <strong>Name:</strong> {deleteTarget?.name}
+                  <strong>{t('name', language)}:</strong> {deleteTarget?.name}
                 </p>
                 <p>
-                  <strong>Email:</strong> {deleteTarget?.email}
+                  <strong>{t('email', language)}:</strong> {deleteTarget?.email}
                 </p>
               </div>
             </div>
@@ -263,13 +269,13 @@ const ViewAdmin = ({ userEmail, onLogout }) => {
                   setDeleteTarget(null)
                 }}
               >
-                No
+                {t('no', language)}
               </button>
               <button
                 className="modal-btn-confirm"
                 onClick={handleConfirmDelete}
               >
-                Yes
+                {t('yes', language)}
               </button>
             </div>
           </div>

@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import axios from 'axios'
 import './LoginPage.css'
 import TopBar from '../components/TopBar'
+import { getApiUrl, ROUTES } from '../config/appConfig'
 
 const LoginPage = ({ onLoginSuccess }) => {
     const navigate = useNavigate()
@@ -39,7 +40,7 @@ const LoginPage = ({ onLoginSuccess }) => {
         setLoading(true)
         try {
             const response = await axios.post(
-                `https://api.gramsamruddhi.in/auth/send-otp?role=ZP_ADMIN&email=${encodeURIComponent(email)}`,
+                `${getApiUrl('/auth/send-otp')}?role=ZP_ADMIN&email=${encodeURIComponent(email)}`,
                 {},
                 { withCredentials: true }
             )
@@ -96,7 +97,7 @@ const LoginPage = ({ onLoginSuccess }) => {
         setLoading(true)
         try {
             const response = await axios.post(
-                `https://api.gramsamruddhi.in/auth/verify-otp?role=ZP_ADMIN&email=${encodeURIComponent(email)}&otp=${otpCode}`,
+                `${getApiUrl('/auth/verify-otp')}?role=ZP_ADMIN&email=${encodeURIComponent(email)}&otp=${otpCode}`,
                 {},
                 { withCredentials: true }
             )
@@ -104,7 +105,7 @@ const LoginPage = ({ onLoginSuccess }) => {
             if (response.data.verified) {
                 localStorage.setItem('adminLastActivity', new Date().toISOString());
                 onLoginSuccess()
-                navigate('/zp-admin/dashboard')
+                navigate(ROUTES.dashboard)
             } else {
                 if (response.data.failureReason === 'user does not exist') {
                     setStep('email')
@@ -146,7 +147,7 @@ const LoginPage = ({ onLoginSuccess }) => {
         setLoading(true)
         try {
             const response = await axios.post(
-                `https://api.gramsamruddhi.in/auth/send-otp?role=ZP_ADMIN&email=${encodeURIComponent(email)}`,
+                `${getApiUrl('/auth/send-otp')}?role=ZP_ADMIN&email=${encodeURIComponent(email)}`,
                 {},
                 { withCredentials: true }
             )

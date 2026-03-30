@@ -1,3 +1,5 @@
+import { getApiUrl } from '../config/appConfig'
+
 let accessToken = null
 let refreshPromise = null
 let refreshIntervalId = null
@@ -25,7 +27,7 @@ export const refreshZpAdminAccessToken = async () => {
   }
 
   refreshPromise = (async () => {
-    const data = await fetchJson('https://api.gramsamruddhi.in/auth/refresh/zp-admin', {
+    const data = await fetchJson(getApiUrl('/auth/refresh/zp-admin'), {
       method: 'POST',
       credentials: 'include',
     })
@@ -59,11 +61,13 @@ export const startZpAdminJwtScheduler = () => {
 
 export const stopZpAdminJwtScheduler = () => {
   if (!refreshIntervalId) {
+    accessToken = null
     return
   }
 
   window.clearInterval(refreshIntervalId)
   refreshIntervalId = null
+  accessToken = null
 }
 
 export const initializeZpAdminJwtFlow = async () => {

@@ -3,6 +3,7 @@ import './TopBar.css'
 import {useEffect, useState} from 'react'
 import {useLanguage} from '../context/LanguageContext'
 import {t} from '../utils/translations'
+import { ROUTES, SESSION_TIMEOUT_MS } from '../config/appConfig'
 
 const TopBar = ({userEmail, onLogout, isLoggedIn}) => {
     const [remainingTime, setRemainingTime] = useState('15:00')
@@ -25,7 +26,7 @@ const TopBar = ({userEmail, onLogout, isLoggedIn}) => {
 
             const lastActivity = new Date(lastActivityString);
             const diffMs = Date.now() - lastActivity.getTime();
-            const totalSessionSeconds = 15 * 60;
+            const totalSessionSeconds = Math.floor(SESSION_TIMEOUT_MS / 1000);
             const remainingSeconds = totalSessionSeconds - Math.floor(diffMs / 1000);
 
             if (remainingSeconds <= 0) {
@@ -77,7 +78,7 @@ const TopBar = ({userEmail, onLogout, isLoggedIn}) => {
     }
 
     const handleBrandClick = () => {
-        navigate('/dashboard')
+        navigate(ROUTES.dashboard)
     }
 
     return (

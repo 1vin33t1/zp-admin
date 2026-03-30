@@ -1,12 +1,16 @@
 import { useNavigate, useLocation } from 'react-router-dom'
 import { useState, useEffect } from 'react'
-import axios from 'axios'
 import './EditAdmin.css'
 import TopBar from '../../components/TopBar'
+import { useLanguage } from '../../context/LanguageContext'
+import { t } from '../../utils/translations'
+import { createAxiosInstance } from '../../utils/apiUtils'
+import { ROUTES } from '../../config/appConfig'
 
 const EditAdmin = ({ userEmail, onLogout }) => {
   const navigate = useNavigate()
   const location = useLocation()
+  const { language, getLanguageCode } = useLanguage()
   const [name, setName] = useState('')
   const [email, setEmail] = useState('')
   const [originalEmail, setOriginalEmail] = useState('')
@@ -21,7 +25,7 @@ const EditAdmin = ({ userEmail, onLogout }) => {
 
   useEffect(() => {
     if (!adminData) {
-      setError('No admin data provided')
+      setError(t('noAdminDataProvided', language))
       setLoading(false)
       return
     }
@@ -34,7 +38,7 @@ const EditAdmin = ({ userEmail, onLogout }) => {
 
   const handleUpdateClick = () => {
     if (!name.trim()) {
-      setError('Name cannot be empty')
+      setError(t('nameCannotBeEmpty', language))
       return
     }
 
@@ -47,26 +51,26 @@ const EditAdmin = ({ userEmail, onLogout }) => {
     setIsSubmitting(true)
 
     try {
-      const response = await axios.put(
-        'https://api.gramsamruddhi.in/auth/staff',
+      const apiInstance = createAxiosInstance(getLanguageCode())
+      const response = await apiInstance.put(
+        '/auth/staff',
         {
           email: originalEmail,
           role: 'ZP_ADMIN',
           name: name,
-        },
-        { withCredentials: true }
+        }
       )
 
       if (response.data.success) {
         setShowSuccessModal(true)
         setTimeout(() => {
-          navigate('/admin/view')
+          navigate(ROUTES.adminView)
         }, 2000)
       } else {
-        setError(response.data.failureReason || 'Failed to update admin')
+        setError(response.data.failureReason || t('adminUpdateFailure', language))
       }
     } catch (err) {
-      setError(err.response?.data?.failureReason || 'Failed to update admin')
+      setError(err.response?.data?.failureReason || t('adminUpdateFailure', language))
     } finally {
       setIsSubmitting(false)
     }
@@ -77,7 +81,7 @@ const EditAdmin = ({ userEmail, onLogout }) => {
       <div className="page-container">
         <TopBar userEmail={userEmail} onLogout={onLogout} isLoggedIn={true} />
         <div className="page-content">
-          <div style={{ textAlign: 'center', padding: '48px' }}>Loading...</div>
+          <div style={{ textAlign: 'center', padding: '48px' }}>{t('loading', language)}</div>
         </div>
       </div>
     )
@@ -89,8 +93,8 @@ const EditAdmin = ({ userEmail, onLogout }) => {
         <TopBar userEmail={userEmail} onLogout={onLogout} isLoggedIn={true} />
         <div className="page-content">
           <div className="error-message">{error}</div>
-          <button onClick={() => navigate('/admin/view')} className="btn-back-error">
-            Go Back to Admin List
+          <button onClick={() => navigate(ROUTES.adminView)} className="btn-back-error">
+            {t('goBackToAdminList', language)}
           </button>
         </div>
       </div>
@@ -101,53 +105,53 @@ const EditAdmin = ({ userEmail, onLogout }) => {
     <div className="page-container">
       <TopBar userEmail={userEmail} onLogout={onLogout} isLoggedIn={true} />
       <div className="page-content">
-        <button onClick={() => navigate('/admin/view')} className="back-button">
-          ← Back to Admin List
+        <button onClick={() => navigate(ROUTES.adminView)} className="back-button">
+          ← {t('goBackToAdminList', language)}
         </button>
 
-        <div className="page-heading">Edit Admin</div>
+        <div className="page-heading">{t('editAdmin', language)}</div>
 
         {error && <div className="error-message">{error}</div>}
 
         <div className="edit-form-container">
           <div className="form-section">
             <div className="form-group">
-              <label className="form-label">Email Address</label>
+              <label className="form-label">{t('emailAddress', language)}</label>
               <input
                 type="email"
                 value={email}
                 disabled
                 className="form-input form-input-disabled"
-                placeholder="Email (cannot be edited)"
+                placeholder={t('emailCannotBeEdited', language)}
               />
-              <div className="form-hint">Email address cannot be changed</div>
+              <div className="form-hint">{t('emailAddressCannotBeChanged', language)}</div>
             </div>
 
             <div className="form-group">
-              <label className="form-label">Name</label>
+              <label className="form-label">{t('name', language)}</label>
               <input
                 type="text"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
                 className="form-input"
-                placeholder="Enter admin name"
+                placeholder={t('enterAdminName', language)}
               />
             </div>
           </div>
 
           <div className="button-group">
             <button
-              onClick={() => navigate('/admin/view')}
+              onClick={() => navigate(ROUTES.adminView)}
               className="btn-cancel"
             >
-              Back to List
+              {t('goBackToAdminList', language)}
             </button>
             <button
               onClick={handleUpdateClick}
               className="btn-update"
               disabled={isSubmitting}
             >
-              {isSubmitting ? 'Updating...' : 'Update Admin'}
+              {isSubmitting ? t('updating', language) : t('updateAdmin', language)}
             </button>
           </div>
         </div>
@@ -157,15 +161,15 @@ const EditAdmin = ({ userEmail, onLogout }) => {
       {showConfirmModal && (
         <div className="modal-overlay">
           <div className="modal-content">
-            <div className="modal-header">Confirm Update</div>
+            <div className="modal-header">{t('confirmUpdate', language)}</div>
             <div className="modal-body">
-              <p>Are you sure you want to update this admin?</p>
+              <p>{t('areYouSureUpdateAdmin', language)}</p>
               <div className="modal-details">
                 <p>
-                  <strong>Email:</strong> {email}
+                  <strong>{t('email', language)}:</strong> {email}
                 </p>
                 <p>
-                  <strong>Name:</strong> {name}
+                  <strong>{t('name', language)}:</strong> {name}
                 </p>
               </div>
             </div>
@@ -174,13 +178,13 @@ const EditAdmin = ({ userEmail, onLogout }) => {
                 className="modal-btn-cancel"
                 onClick={() => setShowConfirmModal(false)}
               >
-                Go Back
+                {t('goBack', language)}
               </button>
               <button
                 className="modal-btn-confirm"
                 onClick={handleConfirmUpdate}
               >
-                Yes, Update
+                {t('yesUpdateAdmin', language)}
               </button>
             </div>
           </div>
@@ -192,9 +196,9 @@ const EditAdmin = ({ userEmail, onLogout }) => {
         <div className="modal-overlay">
           <div className="modal-content modal-success">
             <div className="success-icon">✓</div>
-            <div className="modal-header">Successfully Updated</div>
+            <div className="modal-header">{t('successfullyUpdated', language)}</div>
             <div className="modal-body">
-              <p>Admin has been updated successfully!</p>
+              <p>{t('adminUpdatedSuccessfully', language)}</p>
             </div>
           </div>
         </div>

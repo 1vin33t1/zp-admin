@@ -34,9 +34,7 @@ const AddStaff = ({userEmail, onLogout}) => {
     const fetchRegions = async () => {
         try {
             const apiInstance = createAxiosInstance(getLanguageCode())
-            const response = await apiInstance.get(
-                'https://api.gramsamruddhi.in/auth/all/region?type=applicant'
-            )
+            const response = await apiInstance.get('/auth/all/region?type=applicant')
             const sortedRegions = response.data.region.sort((a, b) => {
                 return a.localeCompare(b);
             });
@@ -103,15 +101,14 @@ const AddStaff = ({userEmail, onLogout}) => {
         try {
             const apiInstance = createAxiosInstance(getLanguageCode())
             const response = await apiInstance.post(
-                'https://api.gramsamruddhi.in/auth/staff',
+                '/auth/staff',
                 {
                     email: email,
                     role: 'ZP_STAFF',
                     postedTaluka: postedRegion,
                     designatedTaluka: selectedRegions,
                     name: name,
-                },
-                {withCredentials: true}
+                }
             )
 
             if (response.data.success) {

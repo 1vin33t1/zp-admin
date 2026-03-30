@@ -1,14 +1,17 @@
 import { useNavigate } from 'react-router-dom'
-import { useState, useEffect } from 'react'
-import axios from 'axios'
+import { useState } from 'react'
 import './AddAdmin.css'
 import TopBar from '../../components/TopBar'
+import { useLanguage } from '../../context/LanguageContext'
+import { t } from '../../utils/translations'
+import { createAxiosInstance } from '../../utils/apiUtils'
+import { ROUTES } from '../../config/appConfig'
 
 const AddAdmin = ({ userEmail, onLogout }) => {
   const navigate = useNavigate()
+  const { language, getLanguageCode } = useLanguage()
   const [email, setEmail] = useState('')
   const [name, setName] = useState('')
-  const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
   const [showConfirmModal, setShowConfirmModal] = useState(false)
   const [showSuccessModal, setShowSuccessModal] = useState(false)
@@ -22,17 +25,17 @@ const AddAdmin = ({ userEmail, onLogout }) => {
 
   const validateForm = () => {
     if (!email.trim()) {
-      setError('Email is required')
+      setError(t('emailRequired', language))
       return false
     }
 
     if (!validateEmail(email)) {
-      setError('Please enter a valid email address')
+      setError(t('validEmailRequired', language))
       return false
     }
 
     if (!name.trim()) {
-      setError('Name is required')
+      setError(t('nameRequired', language))
       return false
     }
 
@@ -54,26 +57,26 @@ const AddAdmin = ({ userEmail, onLogout }) => {
     setIsSubmitting(true)
 
     try {
-      const response = await axios.post(
-        'https://api.gramsamruddhi.in/auth/staff',
+      const apiInstance = createAxiosInstance(getLanguageCode())
+      const response = await apiInstance.post(
+        '/auth/staff',
         {
           email: email,
           role: 'ZP_ADMIN',
           name: name,
-        },
-        { withCredentials: true }
+        }
       )
 
       if (response.data.success) {
         setShowSuccessModal(true)
         setTimeout(() => {
-          navigate('/dashboard')
+          navigate(ROUTES.dashboard)
         }, 2000)
       } else {
-        setError(response.data.failureReason || 'Failed to add admin')
+        setError(response.data.failureReason || t('adminAddFailure', language))
       }
     } catch (err) {
-      setError(err.response?.data?.failureReason || 'Failed to add admin')
+      setError(err.response?.data?.failureReason || t('adminAddFailure', language))
     } finally {
       setIsSubmitting(false)
     }
@@ -83,18 +86,18 @@ const AddAdmin = ({ userEmail, onLogout }) => {
     <div className="page-container">
       <TopBar userEmail={userEmail} onLogout={onLogout} isLoggedIn={true} />
       <div className="page-content">
-        <button onClick={() => navigate('/dashboard')} className="back-button">
-          ← Back to Dashboard
+        <button onClick={() => navigate(ROUTES.dashboard)} className="back-button">
+          ← {t('backToDashboard', language)}
         </button>
 
-        <div className="page-heading">Add Admin</div>
+        <div className="page-heading">{t('addAdmin', language)}</div>
 
         {error && <div className="error-message">{error}</div>}
 
         <div className="add-form-container">
           <div className="form-section">
             <div className="form-group">
-              <label className="form-label">Email Address *</label>
+              <label className="form-label">{t('emailAddress', language)} *</label>
               <input
                 type="email"
                 value={email}
@@ -103,12 +106,12 @@ const AddAdmin = ({ userEmail, onLogout }) => {
                   setError('')
                 }}
                 className="form-input"
-                placeholder="Enter admin email"
+                placeholder={t('enterAdminEmail', language)}
               />
             </div>
 
             <div className="form-group">
-              <label className="form-label">Name *</label>
+              <label className="form-label">{t('name', language)} *</label>
               <input
                 type="text"
                 value={name}
@@ -117,24 +120,24 @@ const AddAdmin = ({ userEmail, onLogout }) => {
                   setError('')
                 }}
                 className="form-input"
-                placeholder="Enter admin name"
+                placeholder={t('enterAdminName', language)}
               />
             </div>
           </div>
 
           <div className="button-group">
             <button
-              onClick={() => navigate('/dashboard')}
+              onClick={() => navigate(ROUTES.dashboard)}
               className="btn-cancel"
             >
-              Back to Dashboard
+              {t('backToDashboard', language)}
             </button>
             <button
               onClick={handleAddAdminClick}
               className="btn-add"
               disabled={isSubmitting}
             >
-              {isSubmitting ? 'Adding...' : 'Add Admin'}
+              {isSubmitting ? t('adding', language) : t('addAdmin', language)}
             </button>
           </div>
         </div>
@@ -144,15 +147,15 @@ const AddAdmin = ({ userEmail, onLogout }) => {
       {showConfirmModal && (
         <div className="modal-overlay">
           <div className="modal-content">
-            <div className="modal-header">Confirm Add Admin</div>
+            <div className="modal-header">{t('confirmAddAdmin', language)}</div>
             <div className="modal-body">
-              <p>Are you sure you want to add this admin?</p>
+              <p>{t('areYouSureAddAdmin', language)}</p>
               <div className="modal-details">
                 <p>
-                  <strong>Email:</strong> {email}
+                  <strong>{t('email', language)}:</strong> {email}
                 </p>
                 <p>
-                  <strong>Name:</strong> {name}
+                  <strong>{t('name', language)}:</strong> {name}
                 </p>
               </div>
             </div>
@@ -161,13 +164,13 @@ const AddAdmin = ({ userEmail, onLogout }) => {
                 className="modal-btn-cancel"
                 onClick={() => setShowConfirmModal(false)}
               >
-                Go Back
+                {t('goBack', language)}
               </button>
               <button
                 className="modal-btn-confirm"
                 onClick={handleConfirmAdd}
               >
-                Yes, Add
+                {t('yesAddAdmin', language)}
               </button>
             </div>
           </div>
@@ -179,9 +182,9 @@ const AddAdmin = ({ userEmail, onLogout }) => {
         <div className="modal-overlay">
           <div className="modal-content modal-success">
             <div className="success-icon">✓</div>
-            <div className="modal-header">Successfully Added</div>
+            <div className="modal-header">{t('successfullyAdded', language)}</div>
             <div className="modal-body">
-              <p>Admin has been added successfully!</p>
+              <p>{t('adminAddedSuccessfully', language)}</p>
             </div>
           </div>
         </div>

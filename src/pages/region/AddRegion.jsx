@@ -1,11 +1,15 @@
 import { useNavigate } from 'react-router-dom'
 import { useState } from 'react'
-import axios from 'axios'
 import './AddRegion.css'
 import TopBar from '../../components/TopBar'
+import { useLanguage } from '../../context/LanguageContext'
+import { t } from '../../utils/translations'
+import { createAxiosInstance } from '../../utils/apiUtils'
+import { ROUTES } from '../../config/appConfig'
 
 const AddRegion = ({ userEmail, onLogout }) => {
   const navigate = useNavigate()
+  const { language, getLanguageCode } = useLanguage()
   const [regionName, setRegionName] = useState('')
   const [error, setError] = useState('')
   const [isSubmitting, setIsSubmitting] = useState(false)
@@ -13,12 +17,12 @@ const AddRegion = ({ userEmail, onLogout }) => {
 
   const validateForm = () => {
     if (!regionName.trim()) {
-      setError('Taluka name is required')
+      setError(t('regionNameRequired', language))
       return false
     }
 
     if (regionName.trim().length < 3) {
-      setError('Taluka name must be at least 3 characters long')
+      setError(t('minimumThreeCharacters', language))
       return false
     }
 
@@ -40,23 +44,22 @@ const AddRegion = ({ userEmail, onLogout }) => {
     setIsSubmitting(true)
 
     try {
-      const response = await axios.post(
-        'https://api.gramsamruddhi.in/auth/region',
+      const apiInstance = createAxiosInstance(getLanguageCode())
+      const response = await apiInstance.post(
+        '/auth/region',
         {
           type: 'applicant',
           regionName: regionName.trim(),
-        },
-        { withCredentials: true }
+        }
       )
 
       if (response.data.success) {
-        // Redirect to dashboard
-        navigate('/dashboard')
+        navigate(ROUTES.dashboard)
       } else {
-        setError(response.data.failureReason || 'Failed to add Taluka')
+        setError(response.data.failureReason || t('failedToAddRegion', language))
       }
     } catch (err) {
-      setError(err.response?.data?.failureReason || 'Failed to add Taluka')
+      setError(err.response?.data?.failureReason || t('failedToAddRegion', language))
     } finally {
       setIsSubmitting(false)
     }
@@ -66,18 +69,18 @@ const AddRegion = ({ userEmail, onLogout }) => {
     <div className="page-container">
       <TopBar userEmail={userEmail} onLogout={onLogout} isLoggedIn={true} />
       <div className="page-content">
-        <button onClick={() => navigate('/dashboard')} className="back-button">
-          ← Back to Dashboard
+        <button onClick={() => navigate(ROUTES.dashboard)} className="back-button">
+          ← {t('backToDashboard', language)}
         </button>
 
-        <div className="page-heading">Add Taluka</div>
+        <div className="page-heading">{t('addRegion', language)}</div>
 
         {error && <div className="error-message">{error}</div>}
 
         <div className="add-form-container">
           <div className="form-section">
             <div className="form-group">
-              <label className="form-label">Taluka Name *</label>
+              <label className="form-label">{t('regionName', language)} *</label>
               <input
                 type="text"
                 value={regionName}
@@ -86,29 +89,29 @@ const AddRegion = ({ userEmail, onLogout }) => {
                   setError('')
                 }}
                 className="form-input"
-                placeholder="Enter Taluka Name (minimum 3 characters)"
+                placeholder={t('regionName', language)}
                 disabled={isSubmitting}
               />
               <div className="form-hint">
-                Minimum 3 characters required
+                {t('minimumCharactersRequired', language)}
               </div>
             </div>
           </div>
 
           <div className="button-group">
             <button
-              onClick={() => navigate('/dashboard')}
+              onClick={() => navigate(ROUTES.dashboard)}
               className="btn-cancel"
               disabled={isSubmitting}
             >
-              Back to Dashboard
+              {t('backToDashboard', language)}
             </button>
             <button
               onClick={handleAddRegionClick}
               className="btn-add"
               disabled={isSubmitting}
             >
-              {isSubmitting ? 'Adding...' : 'Add Taluka'}
+              {isSubmitting ? t('adding', language) : t('addRegionButton', language)}
             </button>
           </div>
         </div>
@@ -118,9 +121,9 @@ const AddRegion = ({ userEmail, onLogout }) => {
       {showConfirmModal && (
         <div className="modal-overlay">
           <div className="modal-content">
-            <div className="modal-header">Confirm Add Taluka</div>
+            <div className="modal-header">{t('confirmAddRegion', language)}</div>
             <div className="modal-body">
-              <p>You are about to add taluka:</p>
+              <p>{t('youAreAboutToAddRegion', language)}</p>
               <div className="modal-details">
                 <p className="region-name-display">{regionName}</p>
               </div>
@@ -130,13 +133,13 @@ const AddRegion = ({ userEmail, onLogout }) => {
                 className="modal-btn-cancel"
                 onClick={() => setShowConfirmModal(false)}
               >
-                Go Back
+                {t('goBack', language)}
               </button>
               <button
                 className="modal-btn-confirm"
                 onClick={handleConfirmAdd}
               >
-                Yes
+                {t('yes', language)}
               </button>
             </div>
           </div>

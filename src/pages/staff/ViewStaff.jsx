@@ -61,9 +61,7 @@ const ViewStaff = ({userEmail, onLogout}) => {
         setError('')
         try {
             const apiInstance = createAxiosInstance(getLanguageCode())
-            const response = await apiInstance.get(
-                'https://api.gramsamruddhi.in/auth/all/staff?role=ZP_STAFF'
-            )
+            const response = await apiInstance.get('/auth/all/staff?role=ZP_STAFF')
             setStaff(response.data.staff || [])
         } catch (err) {
             setError(t('staffListError', language))
@@ -76,9 +74,7 @@ const ViewStaff = ({userEmail, onLogout}) => {
     const fetchRegions = async () => {
         try {
             const apiInstance = createAxiosInstance(getLanguageCode())
-            const response = await apiInstance.get(
-                'https://api.gramsamruddhi.in/auth/all/region?type=applicant'
-            )
+            const response = await apiInstance.get('/auth/all/region?type=applicant')
             const sortedRegions = response.data.region.sort((a, b) => {
                 return a.localeCompare(b);
             });
@@ -104,7 +100,7 @@ const ViewStaff = ({userEmail, onLogout}) => {
         try {
             const apiInstance = createAxiosInstance(getLanguageCode())
             const response = await apiInstance.delete(
-                'https://api.gramsamruddhi.in/auth/staff',
+                '/auth/staff',
                 {
                     data: {
                         email: deleteTarget.email,

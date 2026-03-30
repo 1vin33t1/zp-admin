@@ -5,6 +5,7 @@ import TopBar from '../../components/TopBar'
 import { useLanguage } from '../../context/LanguageContext'
 import { t } from '../../utils/translations'
 import { createAxiosInstance } from '../../utils/apiUtils'
+import { getApiUrl, ROUTES } from '../../config/appConfig'
 import {
   getZpAdminAccessToken,
   initializeZpAdminJwtFlow,
@@ -37,9 +38,7 @@ const AssignAuditor = ({ userEmail, onLogout }) => {
       try {
         await initializeZpAdminJwtFlow()
         const apiInstance = createAxiosInstance(getLanguageCode())
-        const response = await apiInstance.get(
-          'https://api.gramsamruddhi.in/auth/all/staff?role=ZP_STAFF'
-        )
+        const response = await apiInstance.get('/auth/all/staff?role=ZP_STAFF')
 
         if (isMounted) {
           setStaff(response.data?.staff || [])
@@ -87,13 +86,13 @@ const AssignAuditor = ({ userEmail, onLogout }) => {
     try {
       const accessToken = await getZpAdminAccessToken()
       const response = await fetch(
-        `https://api.gramsamruddhi.in/zp-staff/${applicationId}/assign-auditor`,
+        getApiUrl(`/zp-staff/${applicationId}/assign-auditor`),
         {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
             Accept: 'application/json, text/plain, */*',
-            'Accept-Language': language,
+            'Accept-Language': getLanguageCode(),
             Authorization: `Bearer ${accessToken}`,
           },
           credentials: 'include',
@@ -111,7 +110,7 @@ const AssignAuditor = ({ userEmail, onLogout }) => {
 
       setShowSuccessModal(true)
       setTimeout(() => {
-        navigate('/staff/applications')
+        navigate(ROUTES.staffApplications)
       }, 3000)
     } catch (err) {
       setError(err.message || t('assignAuditorFailure', language))
@@ -135,7 +134,7 @@ const AssignAuditor = ({ userEmail, onLogout }) => {
     <div className="page-container">
       <TopBar userEmail={userEmail} onLogout={onLogout} isLoggedIn={true} />
       <div className="page-content">
-        <button onClick={() => navigate(-1)} className="back-button">
+        <button onClick={() => navigate(ROUTES.staffApplications)} className="back-button">
           ← {t('back', language)}
         </button>
 
@@ -218,7 +217,10 @@ const AssignAuditor = ({ userEmail, onLogout }) => {
         )}
 
         <div className="assign-actions-bar">
-          <button className="assign-page-btn assign-page-btn-secondary" onClick={() => navigate(-1)}>
+          <button
+            className="assign-page-btn assign-page-btn-secondary"
+            onClick={() => navigate(ROUTES.staffApplications)}
+          >
             {t('back', language)}
           </button>
           <button

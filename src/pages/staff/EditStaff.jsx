@@ -44,9 +44,7 @@ const EditStaff = ({userEmail, onLogout}) => {
     const fetchRegions = async () => {
         try {
             const apiInstance = createAxiosInstance(getLanguageCode())
-            const response = await apiInstance.get(
-                'https://api.gramsamruddhi.in/auth/all/region?type=applicant'
-            )
+            const response = await apiInstance.get('/auth/all/region?type=applicant')
             setRegions(response.data.region || [])
         } catch (err) {
             console.error('Failed to fetch regions:', err)
@@ -91,7 +89,7 @@ const EditStaff = ({userEmail, onLogout}) => {
         try {
             const apiInstance = createAxiosInstance(getLanguageCode())
             const response = await apiInstance.put(
-                'https://api.gramsamruddhi.in/auth/staff',
+                '/auth/staff',
                 {
                     email: originalEmail,
                     role: 'ZP_STAFF',
